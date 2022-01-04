@@ -13,7 +13,7 @@ public class Projekt {
         // Start Physics engine
         Timer timer = new Timer();
         TimerTask task = new Physics();
-        timer.schedule(task, 0, 1);
+        timer.schedule(task, 0, 10);
 
     }
 }
