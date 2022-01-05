@@ -13,7 +13,7 @@ public class init extends Application {
     public void start(Stage stage) throws Exception{ 
 
         AnchorPane root = FXMLLoader.load(getClass().getResource("JavaFXTest.fxml"));
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root, 727, 389);
 
 
         //Creating a line object 
@@ -28,7 +28,7 @@ public class init extends Application {
         root.getChildren().add(line);
 
 
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("Januar Projekt");
 
         stage.setScene(scene);
         stage.show();
