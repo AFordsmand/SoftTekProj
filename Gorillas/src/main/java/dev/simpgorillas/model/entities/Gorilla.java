@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class Gorilla {
 
-    public int x, y, dir;
+    public int x, y, centerX, dir;
     public int score;
     public static final int WIDTH = 12;
     public static final int HEIGHT = 20;
@@ -21,6 +21,7 @@ public class Gorilla {
         } else {
             dir = -1;
         }
+        this.centerX = x + WIDTH / 2;
     }
 
     public void render(GraphicsContext gc) {
@@ -48,7 +49,7 @@ public class Gorilla {
     }
 
     public boolean isHit(int lands, int hitZone) {
-        if ((lands >= x - hitZone) && (x + hitZone >= lands)) {
+        if ((lands >= centerX - hitZone) && (centerX + hitZone >= lands)) {
             return true;
         }
         return false;

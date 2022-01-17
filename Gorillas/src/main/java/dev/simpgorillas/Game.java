@@ -39,7 +39,7 @@ public class Game {
     private void setup() {
         // Color the background
         gc.setFill(Color.rgb(0, 52, 224));
-        gc.fillRect(0,0, WIDTH, HEIGHT);
+        gc.fillRect(0, 0, WIDTH, HEIGHT);
 
         // Instantiate players
         player1 = new Gorilla(0, HEIGHT - Gorilla.HEIGHT, true);

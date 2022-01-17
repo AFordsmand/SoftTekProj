@@ -12,7 +12,6 @@ public class Sun {
     }
 
 
-
     public void onHit(Banana banana) {
         if (banana.getX() == x && banana.getY() == y) {
             hit = true;

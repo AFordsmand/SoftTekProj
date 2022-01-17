@@ -22,7 +22,7 @@ public class Banana {
 
     public void render(GraphicsContext gc) {
         gc.setFill(bananaYellow);
-        gc.fillRect(x, y, 1,1);
+        gc.fillRect(x, y, 1, 1);
     }
 
     public double getX() {

@@ -2,6 +2,7 @@ package dev.simpgorillas.control;
 
 import dev.simpgorillas.model.SimpModel;
 import dev.simpgorillas.view.SimpView;
+import javafx.event.Event;
 import javafx.stage.Stage;
 
 public class SimpController {
@@ -46,8 +47,7 @@ public class SimpController {
                 if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
                     SimpModel.player1.score++;
                     SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
-                }
-                else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
+                } else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
                     SimpModel.player2.score++;
                     SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
                 }
@@ -74,8 +74,7 @@ public class SimpController {
                 if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
                     SimpModel.player2.score++;
                     SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
-                }
-                else if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
+                } else if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
                     SimpModel.player1.score++;
                     SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
                 }
