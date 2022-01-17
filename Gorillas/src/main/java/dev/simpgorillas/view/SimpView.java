@@ -40,6 +40,7 @@ public class SimpView {
     public static TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
 
 
+
     public static void setStartScene() {
         widthAndHeightText = new Label("Set the width and height of the game to start playing SimpGorillas!");
         widthAndHeightText.setWrapText(true);

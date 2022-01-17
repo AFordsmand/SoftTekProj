@@ -30,4 +30,11 @@ public class SimpModel {
         player2.render(gc);
     }
 
+    public static int calcDist(int x1, int y1, int x2, int y2) {
+        return (int) Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow(((y2 - y1)), 2));
+    }
+
+    public static int calcAngle(double x1, double y1, double x2, double y2) {
+        return (int) Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
+    }
 }
