@@ -217,9 +217,6 @@ public class SimpController {
 
             File file = fileChooser.showSaveDialog(stage);
 
-            System.out.println(file);
-            System.out.print(SimpModel.gameLog);
-            
             try {
                 FileOutputStream fout = new FileOutputStream(file);
                 fout.write(SimpModel.gameLog.getBytes());
