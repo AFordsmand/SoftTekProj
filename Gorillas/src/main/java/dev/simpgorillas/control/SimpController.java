@@ -6,6 +6,9 @@ import dev.simpgorillas.view.SimpView;
 import javafx.event.Event;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
 
 public class SimpController {
 
@@ -21,8 +24,6 @@ public class SimpController {
 
         // TODO init stuff due to the order of calling and passing
     }
-
-
 
     public static void setStartControls(Stage stage) {
         // Get width and height (if legal) from startScene and set the stage's scene to gameScene
@@ -44,6 +45,17 @@ public class SimpController {
                 // Make the view turn red or something
             }
 
+        });
+
+        final FileChooser fileChooser = new FileChooser();
+
+        SimpView.fileButton.setOnAction(actionEvent -> {
+            File file = fileChooser.showOpenDialog(stage);
+
+            if (file != null) {
+                // TODO: Replay game!
+                System.out.println("File name is : " + file.getName());
+            }
         });
 
     }
@@ -175,33 +187,36 @@ public class SimpController {
     }
 
     public static void Shoot(int Angle, int Velocity, long Wind) {
-                // Clear map
-                SimpModel.drawGame(SimpView.gc);
+        // Clear map
+        SimpModel.drawGame(SimpView.gc);
 
-                // Setup Parameters
-                boolean Player1Turn = SimpModel.player1Turn;
-                int lands = 0;
+        // Setup Parameters
+        boolean Player1Turn = SimpModel.player1Turn;
+        int lands = 0;
 
-                // Throw
-                if (Player1Turn) {
-                    lands = SimpModel.player1.throwBanana(SimpView.gc, Angle, Velocity);
-                }
-                else {
-                    lands = SimpModel.player2.throwBanana(SimpView.gc, Angle, Velocity);
-                }
+        // Throw
+        if (Player1Turn) {
+            lands = SimpModel.player1.throwBanana(SimpView.gc, Angle, Velocity);
+        }
+        else {
+            lands = SimpModel.player2.throwBanana(SimpView.gc, Angle, Velocity);
+        }
+
+        // Check for hit
+        if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
+            SimpModel.player1.score++;
+            SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
+        } else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
+            SimpModel.player2.score++;
+            SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
+        }
+
+        // Change turn
+        SimpModel.player1Turn = !Player1Turn;
 
 
-                // Check for hit
-                if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player1.score++;
-                    SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
-                } else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player2.score++;
-                    SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
-                }
-
-                // Change turn
-                SimpModel.player1Turn = !Player1Turn;
-
+        // TODO: Save Game progress, in file
+        
+        
     }
 }

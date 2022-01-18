@@ -22,10 +22,13 @@ public class SimpView {
     public static Label widthAndHeightText;
     public static Label widthLabel;
     public static Label heightLabel;
+    public static Label fileLabel;
     public static TextField widthInput, heightInput;
     public static Button playButton;
+    public static Button fileButton;
     public static HBox widthNode;
     public static HBox heightNode;
+    public static HBox fileNode;
     public static VBox startPane;
 
     // Fields for GameScene
@@ -55,6 +58,7 @@ public class SimpView {
         heightInput.setPromptText("input height");
         heightInput.setMaxWidth(100);
         playButton = new Button("Play");
+        fileButton = new Button("Replay a Game");
 
         widthNode = new HBox(widthLabel, widthInput);
         widthNode.setSpacing(5);
@@ -67,7 +71,7 @@ public class SimpView {
         startPane.setSpacing(20);
         startPane.setAlignment(Pos.CENTER);
         startPane.setPadding(new Insets(10));
-        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, playButton);
+        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, playButton, fileButton);
 
         startScene = new Scene(startPane, 300, 250);
     }
