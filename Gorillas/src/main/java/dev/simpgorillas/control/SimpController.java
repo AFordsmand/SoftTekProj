@@ -341,9 +341,4 @@ public class SimpController {
         model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
         
     }
-
-    public void runSim() {
-
-
-    }
 }
