@@ -83,7 +83,7 @@ public class SimpController {
                         int Velocity = Integer.parseInt(input.split(" ")[1]);
                         int Wind = Integer.parseInt(input.split(" ")[2]);
 
-                        Shoot(Angle, Velocity, Wind, stage);
+                        Shoot(Angle, Velocity, Wind);
                     }
 
                 } catch(Exception e){
@@ -101,7 +101,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind, stage);
+                Shoot(angle, velocity, wind);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -116,11 +116,9 @@ public class SimpController {
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind, stage);
+                Shoot(angle, velocity, wind);
 
                 // Change turn
-                // is in shoot now?
-                // model.player1Turn = true;
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
@@ -195,7 +193,7 @@ public class SimpController {
                 view.angle1Input.setText(String.valueOf(angle));
                 view.velocity1Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind, stage);
+                Shoot(angle, velocity, wind);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -213,7 +211,7 @@ public class SimpController {
                 view.angle2Input.setText(String.valueOf(angle));
                 view.velocity2Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind, stage);
+                Shoot(angle, velocity, wind);
 
                 // Change turn
                 view.player1Controls.setDisable(false);
@@ -232,7 +230,6 @@ public class SimpController {
             setStartControls();
 
             stage.setTitle("SimpLauncher");
-            stage.setScene(view.startScene);
             stage.setScene(view.startScene);
             stage.centerOnScreen();
         });
@@ -253,7 +250,7 @@ public class SimpController {
         });
     }
 
-    public void Shoot(int Angle, int Velocity, long Wind, Stage stage) {
+    public void Shoot(int Angle, int Velocity, long Wind) {
         // Clear map
         model.drawGame(view.gc);
 
@@ -291,7 +288,6 @@ public class SimpController {
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
             stage.centerOnScreen();
-            stage.show();
         }
         else if (model.player2.score >= model.WinScoreCondition) {
             model.playerWin = 2;
@@ -301,9 +297,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
-            stage.setScene(view.endScene);
             stage.centerOnScreen();
-            stage.show();
         }
 
 

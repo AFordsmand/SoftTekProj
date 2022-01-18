@@ -4,6 +4,8 @@ import dev.simpgorillas.model.entities.Gorilla;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.Timer;
+
 public class SimpModel {
 
     public int gameWidth, gameHeight;
@@ -15,6 +17,8 @@ public class SimpModel {
 
     public Gorilla player1;
     public Gorilla player2;
+
+    public Timer time;
 
 
     public void init() {
