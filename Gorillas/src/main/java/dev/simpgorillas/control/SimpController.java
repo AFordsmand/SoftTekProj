@@ -70,9 +70,6 @@ public class SimpController {
     public void setGameControls() {
         view.throwBtn1.setOnAction(actionEvent -> {
             if (model.player1Turn) {
-                // Clear map
-                model.drawGame(view.gc);
-
                 // Check for legal values and throw banana
                 int angle = Integer.parseInt(view.angle1Input.getText());
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
@@ -88,9 +85,6 @@ public class SimpController {
 
         view.throwBtn2.setOnAction(actionEvent -> {
             if (!model.player1Turn) {
-                // Clear map
-                model.drawGame(view.gc);
-
                 // Check for legal values and throw banana
                 int angle = Integer.parseInt(view.angle2Input.getText());
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
@@ -165,9 +159,6 @@ public class SimpController {
             if (model.player1Turn) {
                 // player1
 
-                // Clear map
-                model.drawGame(view.gc);
-
                 // Get input based on mouse pos and throw the banana
                 int angle = -1 * model.calcAngle(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
@@ -185,8 +176,6 @@ public class SimpController {
                 view.player2Controls.setDisable(false);
             } else {
                 // player2
-                // Clear map
-                model.drawGame(view.gc);
 
                 // Get input based on mouse pos and throw the banana
                 int angle = model.calcAngle(model.player2.centerX, model.player2.y,
