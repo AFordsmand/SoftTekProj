@@ -12,12 +12,14 @@ public class SimpLauncher extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        SimpView.setStartScene();
-        SimpController.setStartControls(stage);
+        SimpModel model = new SimpModel();
+        SimpView view = new SimpView();
+        new SimpController(model, view, stage);
 
         stage.setResizable(false);
         stage.setTitle("SimpLauncher");
         stage.setScene(SimpView.startScene);
+        stage.setScene(view.startScene);
         stage.centerOnScreen();
         stage.show();
     }

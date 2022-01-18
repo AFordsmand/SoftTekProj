@@ -1,8 +1,5 @@
 package dev.simpgorillas.model.entities;
 
-import dev.simpgorillas.Game;
-import dev.simpgorillas.model.SimpModel;
-import dev.simpgorillas.model.entities.Banana;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -29,7 +26,7 @@ public class Gorilla {
         gc.fillRect(x, y, WIDTH, HEIGHT);
     }
 
-    public int throwBanana(GraphicsContext gc, double angle, double velocity) {
+    public int throwBanana(GraphicsContext gc, double angle, double velocity, int gameHeight) {
         Banana banana = new Banana(angle, velocity, dir);
 
         double t = 0.01;
@@ -38,7 +35,7 @@ public class Gorilla {
             t += 0.01;
 
             // Check if the Banana is still in the air
-            if (banana.getY() < SimpModel.gameHeight) {
+            if (banana.getY() < gameHeight) {
                 banana.render(gc);
                 continue;
             }
