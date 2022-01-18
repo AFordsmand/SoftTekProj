@@ -12,13 +12,6 @@ public class SimpLauncher extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        /*SimpModel model = new SimpModel();
-
-        SimpView view = new SimpView();
-
-        SimpController controller = new SimpController(model, view, stage);*/
-
-
         SimpView.setStartScene();
         SimpController.setStartControls(stage);
 

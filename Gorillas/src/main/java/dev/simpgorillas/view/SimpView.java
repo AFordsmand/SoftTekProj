@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class SimpView {
 
@@ -53,6 +55,7 @@ public class SimpView {
         widthAndHeightText = new Label("Set the width and height of the game to start playing SimpGorillas!");
         widthAndHeightText.setWrapText(true);
         widthAndHeightText.setFont(Font.font(14));
+        widthAndHeightText.setTextAlignment(TextAlignment.CENTER);
         widthLabel = new Label("Width : ");
         heightLabel = new Label("Height : ");
 
@@ -146,18 +149,19 @@ public class SimpView {
     }
 
     public static void setEndScene() {
-        winLabel = new Label("Player " + SimpModel.playerWin + " won!");
+        winLabel = new Label("Player " + SimpModel.playerWin + " Won!");
         winLabel.setWrapText(true);
         winLabel.setFont(Font.font(35));
+        winLabel.setAlignment(Pos.CENTER);
 
-        saveButton = new Button("Save");
-        replayButton = new Button("Replay");
+        replayButton = new Button("Play Again");
+        saveButton = new Button("Save Round");
 
         endPane = new VBox();
         endPane.setSpacing(20);
         endPane.setAlignment(Pos.CENTER);
         endPane.setPadding(new Insets(10));
-        endPane.getChildren().addAll(winLabel, saveButton, replayButton);
+        endPane.getChildren().addAll(winLabel, replayButton, saveButton);
 
         endScene = new Scene(endPane, 300, 250);
     }

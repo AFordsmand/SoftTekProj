@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileOutputStream;
 
 public class SimpController {
 
@@ -35,6 +36,8 @@ public class SimpController {
                 SimpModel.gameHeight = Integer.parseInt(SimpView.heightInput.getText());
                 SimpModel.init();
 
+                SimpModel.gameLog = SimpModel.gameWidth + " " + SimpModel.gameHeight;
+
                 SimpView.setGameScene();
                 setGameControls(stage);
 
@@ -47,9 +50,9 @@ public class SimpController {
 
         });
 
-        final FileChooser fileChooser = new FileChooser();
-
         SimpView.fileButton.setOnAction(actionEvent -> {
+
+            FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
 
             if (file != null) {
@@ -207,8 +210,26 @@ public class SimpController {
             stage.show();
 
         });
-    }
 
+        SimpView.saveButton.setOnAction(actionEvent -> {
+            // TODO: Save game
+            FileChooser fileChooser = new FileChooser();
+
+            File file = fileChooser.showSaveDialog(stage);
+
+            System.out.println(file);
+            System.out.print(SimpModel.gameLog);
+            
+            try {
+                FileOutputStream fout = new FileOutputStream(file);
+                fout.write(SimpModel.gameLog.getBytes());
+                fout.close();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
+        });
+    }
 
     public static void Shoot(int Angle, int Velocity, long Wind, Stage stage) {
         // Clear map
@@ -262,6 +283,7 @@ public class SimpController {
 
 
         // TODO: Save Game progress, in file
+        SimpModel.gameLog = SimpModel.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
         
     }
 }

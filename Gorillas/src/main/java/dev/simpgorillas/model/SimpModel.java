@@ -12,6 +12,7 @@ public class SimpModel {
     public static boolean player1Turn = true;
     public static int playerWin = 0;
     public static int WinScoreCondition = 10;
+    public static String gameLog = "";
 
     public static Gorilla player1;
     public static Gorilla player2;
