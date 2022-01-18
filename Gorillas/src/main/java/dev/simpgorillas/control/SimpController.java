@@ -9,6 +9,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.lang.Thread;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.animation.Animation;
+import javafx.util.Duration;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class SimpController {
 
@@ -75,16 +85,38 @@ public class SimpController {
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
                     model.drawGame(view.gc);
+                    view.player1Controls.setDisable(true);
+                    view.player2Controls.setDisable(true);
 
-                    while (fileReader.hasNextLine() && false) {
-                        Thread.sleep(1000);
-                        String input = fileReader.nextLine();
-                        int Angle = Integer.parseInt(input.split(" ")[0]);
-                        int Velocity = Integer.parseInt(input.split(" ")[1]);
-                        int Wind = Integer.parseInt(input.split(" ")[2]);
+                    model.replayer = fileReader;
+                    
+                    Timeline timeline = new Timeline();
+                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    
+                    EventHandler shooter = new EventHandler<ActionEvent>(){
+                            public void handle(ActionEvent t) {
+                                Scanner fileReader = model.replayer;
+                                if (fileReader.hasNextLine()) {
+                                    String input = fileReader.nextLine();
+                                    int Angle = Integer.parseInt(input.split(" ")[0]);
+                                    int Velocity = Integer.parseInt(input.split(" ")[1]);
+                                    int Wind = Integer.parseInt(input.split(" ")[2]);
 
-                        Shoot(Angle, Velocity, Wind, stage);
-                    }
+                                    Shoot(Angle, Velocity, Wind, stage);
+                                    model.replayer = fileReader;
+                                }
+                                else {
+                                    timeline.stop();
+                                }
+                            }
+                    };
+
+
+                    timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(1000), shooter
+                    ));
+
+                    timeline.play();
 
                 } catch(Exception e){
                     e.printStackTrace();
@@ -94,6 +126,7 @@ public class SimpController {
     }
 
     public void setGameControls() {
+
         view.throwBtn1.setOnAction(actionEvent -> {
             if (model.player1Turn) {
                 // Check for legal values and throw banana
@@ -118,9 +151,6 @@ public class SimpController {
 
                 Shoot(angle, velocity, wind, stage);
 
-                // Change turn
-                // is in shoot now?
-                // model.player1Turn = true;
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
@@ -310,5 +340,10 @@ public class SimpController {
         // TODO: Save Game progress, in file
         model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
         
+    }
+
+    public void runSim() {
+
+
     }
 }

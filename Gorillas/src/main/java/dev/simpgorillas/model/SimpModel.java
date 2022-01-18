@@ -3,6 +3,7 @@ package dev.simpgorillas.model;
 import dev.simpgorillas.model.entities.Gorilla;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import java.util.Scanner;
 
 public class SimpModel {
 
@@ -12,6 +13,7 @@ public class SimpModel {
     public int playerWin = 0;
     public int WinScoreCondition = 10;
     public String gameLog = "";
+    public Scanner replayer = null;
 
     public Gorilla player1;
     public Gorilla player2;
