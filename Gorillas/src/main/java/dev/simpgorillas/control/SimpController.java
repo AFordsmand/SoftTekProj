@@ -10,6 +10,8 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
+import java.util.Scanner;
+import java.lang.Thread;
 
 public class SimpController {
 
@@ -56,18 +58,39 @@ public class SimpController {
             File file = fileChooser.showOpenDialog(stage);
 
             if (file != null) {
-                // TODO: Replay game!
-                //System.out.println("File name is : " + file.getName());
+                try {
+                    Scanner fileReader = new Scanner(file);
+                    if (fileReader.hasNextLine()) {
+                        String input = fileReader.nextLine();
+                        SimpModel.gameWidth = Integer.parseInt(input.split(" ")[0]);
+                        SimpModel.gameHeight = Integer.parseInt(input.split(" ")[1]);
+                        SimpModel.init();
+                    }
 
-                SimpView.setEndScene();
-                setEndControls(stage);
+                    SimpModel.gameLog = SimpModel.gameWidth + " " + SimpModel.gameHeight;
 
-                stage.setTitle("SimpLauncher");
-                stage.setScene(SimpView.endScene);
-                stage.show();
+                    SimpView.setGameScene();
+
+                    stage.setTitle("SimpGorillas!");
+                    stage.setScene(SimpView.gameScene);
+                    stage.centerOnScreen();
+                    SimpModel.drawGame(SimpView.gc);
+
+                    while (fileReader.hasNextLine()) {
+                        Thread.sleep(1000);
+                        String input = fileReader.nextLine();
+                        int Angle = Integer.parseInt(input.split(" ")[0]);
+                        int Velocity = Integer.parseInt(input.split(" ")[1]);
+                        int Wind = Integer.parseInt(input.split(" ")[2]);
+
+                        Shoot(Angle, Velocity, Wind, stage);
+                    }
+
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
-
     }
 
     public static void setGameControls(Stage stage) {
@@ -207,6 +230,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(SimpView.startScene);
+            stage.centerOnScreen();
             stage.show();
 
         });
@@ -214,7 +238,6 @@ public class SimpController {
         SimpView.saveButton.setOnAction(actionEvent -> {
             // TODO: Save game
             FileChooser fileChooser = new FileChooser();
-
             File file = fileChooser.showSaveDialog(stage);
 
             try {
@@ -265,6 +288,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(SimpView.endScene);
+            stage.centerOnScreen();
             stage.show();
         }
         else if (SimpModel.player2.score >= SimpModel.WinScoreCondition) {
@@ -275,6 +299,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(SimpView.endScene);
+            stage.centerOnScreen();
             stage.show();
         }
 
