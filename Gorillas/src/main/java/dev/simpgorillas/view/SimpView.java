@@ -28,7 +28,6 @@ public class SimpView {
     public static Button fileButton;
     public static HBox widthNode;
     public static HBox heightNode;
-    public static HBox fileNode;
     public static VBox startPane;
 
     // Fields for GameScene
@@ -42,6 +41,12 @@ public class SimpView {
     public static Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
     public static TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
 
+    // Fields for EndScene
+    public static Scene endScene;
+    public static VBox endPane;
+    public static Label winLabel;
+    public static Button saveButton;
+    public static Button replayButton;
 
 
     public static void setStartScene() {
@@ -140,5 +145,21 @@ public class SimpView {
         gameScene = new Scene(gamePane);
     }
 
+    public static void setEndScene() {
+        winLabel = new Label("Player " + SimpModel.playerWin + " won!");
+        winLabel.setWrapText(true);
+        winLabel.setFont(Font.font(35));
+
+        saveButton = new Button("Save");
+        replayButton = new Button("Replay");
+
+        endPane = new VBox();
+        endPane.setSpacing(20);
+        endPane.setAlignment(Pos.CENTER);
+        endPane.setPadding(new Insets(10));
+        endPane.getChildren().addAll(winLabel, saveButton, replayButton);
+
+        endScene = new Scene(endPane, 300, 250);
+    }
 
 }

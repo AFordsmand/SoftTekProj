@@ -54,7 +54,14 @@ public class SimpController {
 
             if (file != null) {
                 // TODO: Replay game!
-                System.out.println("File name is : " + file.getName());
+                //System.out.println("File name is : " + file.getName());
+
+                SimpView.setEndScene();
+                setEndControls(stage);
+
+                stage.setTitle("SimpLauncher");
+                stage.setScene(SimpView.endScene);
+                stage.show();
             }
         });
 
@@ -68,7 +75,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(SimpView.velocity1Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 SimpView.player1Controls.setDisable(true);
                 SimpView.player2Controls.setDisable(false);
@@ -82,7 +89,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(SimpView.velocity2Input.getText());
                 long wind = 0;
     
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
 
                 SimpView.player1Controls.setDisable(false);
@@ -161,7 +168,7 @@ public class SimpController {
                 SimpView.angle1Input.setText(String.valueOf(angle));
                 SimpView.velocity1Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 SimpView.player1Controls.setDisable(true);
                 SimpView.player2Controls.setDisable(false);
@@ -178,7 +185,7 @@ public class SimpController {
                 SimpView.angle2Input.setText(String.valueOf(angle));
                 SimpView.velocity2Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 SimpView.player1Controls.setDisable(false);
                 SimpView.player2Controls.setDisable(true);
@@ -186,7 +193,16 @@ public class SimpController {
         });
     }
 
-    public static void Shoot(int Angle, int Velocity, long Wind) {
+    public static void setEndControls(Stage stage) {
+        
+
+
+
+
+    }
+
+
+    public static void Shoot(int Angle, int Velocity, long Wind, Stage stage) {
         // Clear map
         SimpModel.drawGame(SimpView.gc);
 
@@ -213,6 +229,28 @@ public class SimpController {
 
         // Change turn
         SimpModel.player1Turn = !Player1Turn;
+
+        // Win Condition
+        if (SimpModel.player1.score >= SimpModel.WinScoreCondition) {
+            SimpModel.playerWin = 1;
+
+            SimpView.setEndScene();
+            setEndControls(stage);
+
+            stage.setTitle("SimpLauncher");
+            stage.setScene(SimpView.endScene);
+            stage.show();
+        }
+        else if (SimpModel.player2.score >= SimpModel.WinScoreCondition) {
+            SimpModel.playerWin = 2;
+
+            SimpView.setEndScene();
+            setEndControls(stage);
+
+            stage.setTitle("SimpLauncher");
+            stage.setScene(SimpView.endScene);
+            stage.show();
+        }
 
 
         // TODO: Save Game progress, in file
