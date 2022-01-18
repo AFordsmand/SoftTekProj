@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
-import java.io.IOException;
+
 
 public class SimpController {
 
@@ -37,7 +37,7 @@ public class SimpController {
 
                 view.setGameScene(model.gameWidth, model.gameHeight);
                 model.drawGame(view.gc);
-                setGameControls(stage);
+                setGameControls();
 
                 stage.setTitle("SimpGorillas!");
                 stage.setScene(view.gameScene);
@@ -62,12 +62,12 @@ public class SimpController {
 
                 stage.setTitle("SimpLauncher");
                 stage.setScene(view.endScene);
-                stage.show();
+                stage.centerOnScreen();
             }
         });
     }
 
-    public void setGameControls(Stage stage) {
+    public void setGameControls() {
         view.throwBtn1.setOnAction(actionEvent -> {
             if (model.player1Turn) {
                 // Clear map
@@ -80,22 +80,7 @@ public class SimpController {
 
                 Shoot(angle, velocity, wind);
 
-                /*
-                int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
-
-                // Check for hit
-                if (model.player2.isHit(lands, model.hitZone)) {
-                    model.player1.score++;
-                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-                } else if (model.player1.isHit(lands, model.hitZone)) {
-                    model.player2.score++;
-                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-                }
-                */
-
                 // Change turn
-                // is in shoot now?
-                // model.player1Turn = false;
                 view.player1Controls.setDisable(true);
                 view.player2Controls.setDisable(false);
             }
@@ -112,19 +97,6 @@ public class SimpController {
                 long wind = 0;
 
                 Shoot(angle, velocity, wind);
-
-                /*
-                int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
-
-                // Check for hit and inc score if hit
-                if (model.player1.isHit(lands, model.hitZone)) {
-                    model.player2.score++;
-                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-                } else if (model.player2.isHit(lands, model.hitZone)) {
-                    model.player1.score++;
-                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-                }
-                */
 
                 // Change turn
                 // is in shoot now?
@@ -208,22 +180,7 @@ public class SimpController {
 
                 Shoot(angle, velocity, wind);
 
-                /*
-                int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
-
-                // Check for hit and inc score if hit
-                if (model.player2.isHit(lands, model.hitZone)) {
-                    model.player1.score++;
-                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-                } else if (model.player1.isHit(lands, model.hitZone)) {
-                    model.player2.score++;
-                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-                }
-                */
-
                 // Change turn
-                // is in shoot now?
-                // model.player1Turn = false;
                 view.player1Controls.setDisable(true);
                 view.player2Controls.setDisable(false);
             } else {
@@ -243,21 +200,7 @@ public class SimpController {
 
                 Shoot(angle, velocity, wind);
 
-
-                int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
-
-                // Check for hit and inc score if hit
-                if (model.player1.isHit(lands, model.hitZone)) {
-                    model.player2.score++;
-                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-                } else if (model.player2.isHit(lands, model.hitZone)) {
-                    model.player1.score++;
-                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-                }
-
                 // Change turn
-                // is in shoot now
-                // model.player1Turn = true;
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
@@ -275,7 +218,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.startScene);
-            stage.show();
+            stage.centerOnScreen();
         });
     }
 
@@ -286,7 +229,7 @@ public class SimpController {
 
         // Setup Parameters
         boolean Player1Turn = model.player1Turn;
-        int lands = 0;
+        int lands;
 
         // Throw
         if (Player1Turn) {
@@ -317,7 +260,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
-            stage.show();
+            stage.centerOnScreen();
         }
         else if (model.player2.score >= model.WinScoreCondition) {
             model.playerWin = 2;
@@ -327,7 +270,7 @@ public class SimpController {
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
-            stage.show();
+            stage.centerOnScreen();
         }
 
 
