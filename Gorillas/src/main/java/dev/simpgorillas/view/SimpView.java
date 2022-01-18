@@ -22,6 +22,7 @@ public class SimpView {
     public Label heightLabel;
     public TextField widthInput, heightInput;
     public Button playButton;
+    public Button fileButton;
     public HBox widthNode;
     public HBox heightNode;
     public VBox startPane;
@@ -37,6 +38,12 @@ public class SimpView {
     public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
     public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
 
+    // Fields for EndScene
+    public Scene endScene;
+    public VBox endPane;
+    public Label winLabel;
+    public Button saveButton;
+    public Button replayButton;
 
 
     public void setStartScene() {
@@ -53,6 +60,7 @@ public class SimpView {
         heightInput.setPromptText("input height");
         heightInput.setMaxWidth(100);
         playButton = new Button("Play");
+        fileButton = new Button("Replay a Game");
 
         widthNode = new HBox(widthLabel, widthInput);
         widthNode.setSpacing(5);
@@ -65,7 +73,7 @@ public class SimpView {
         startPane.setSpacing(20);
         startPane.setAlignment(Pos.CENTER);
         startPane.setPadding(new Insets(10));
-        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, playButton);
+        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, playButton, fileButton);
 
         startScene = new Scene(startPane, 300, 250);
     }
@@ -125,5 +133,21 @@ public class SimpView {
         gameScene = new Scene(gamePane);
     }
 
+    public void setEndScene(int playerWin) {
+        winLabel = new Label("Player " + playerWin + " won!");
+        winLabel.setWrapText(true);
+        winLabel.setFont(Font.font(35));
+
+        saveButton = new Button("Save");
+        replayButton = new Button("Replay");
+
+        endPane = new VBox();
+        endPane.setSpacing(20);
+        endPane.setAlignment(Pos.CENTER);
+        endPane.setPadding(new Insets(10));
+        endPane.getChildren().addAll(winLabel, saveButton, replayButton);
+
+        endScene = new Scene(endPane, 300, 250);
+    }
 
 }

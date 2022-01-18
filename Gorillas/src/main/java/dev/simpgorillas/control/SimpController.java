@@ -4,6 +4,9 @@ import dev.simpgorillas.model.SimpModel;
 import dev.simpgorillas.view.SimpView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
 
 public class SimpController {
 
@@ -17,12 +20,12 @@ public class SimpController {
         this.stage = stage;
 
         view.setStartScene();
-        setStartControls(stage);
+        setStartControls();
     }
 
 
 
-    public void setStartControls(Stage stage) {
+    public void setStartControls() {
         // Get width and height (if legal) from startScene and set the stage's scene to gameScene
         view.playButton.setOnAction(actionEvent -> {
             // Check widthInput and heightInput for legal values
@@ -45,6 +48,23 @@ public class SimpController {
 
         });
 
+        final FileChooser fileChooser = new FileChooser();
+
+        view.fileButton.setOnAction(actionEvent -> {
+            File file = fileChooser.showOpenDialog(stage);
+
+            if (file != null) {
+                // TODO: Replay game!
+                //System.out.println("File name is : " + file.getName());
+
+                view.setEndScene(model.playerWin);
+                setEndControls();
+
+                stage.setTitle("SimpLauncher");
+                stage.setScene(view.endScene);
+                stage.show();
+            }
+        });
     }
 
     public void setGameControls(Stage stage) {
@@ -56,7 +76,11 @@ public class SimpController {
                 // Check for legal values and throw banana
                 int angle = Integer.parseInt(view.angle1Input.getText());
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
+                long wind = 0;
 
+                Shoot(angle, velocity, wind);
+
+                /*
                 int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit
@@ -67,9 +91,11 @@ public class SimpController {
                     model.player2.score++;
                     view.player2Label.setText("Player 2 - Score: " + model.player2.score);
                 }
+                */
 
                 // Change turn
-                model.player1Turn = false;
+                // is in shoot now?
+                // model.player1Turn = false;
                 view.player1Controls.setDisable(true);
                 view.player2Controls.setDisable(false);
             }
@@ -83,7 +109,11 @@ public class SimpController {
                 // Check for legal values and throw banana
                 int angle = Integer.parseInt(view.angle2Input.getText());
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
+                long wind = 0;
 
+                Shoot(angle, velocity, wind);
+
+                /*
                 int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit and inc score if hit
@@ -94,14 +124,14 @@ public class SimpController {
                     model.player1.score++;
                     view.player1Label.setText("Player 1 - Score: " + model.player1.score);
                 }
+                */
 
                 // Change turn
-                model.player1Turn = true;
+                // is in shoot now?
+                // model.player1Turn = true;
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
-
-
         });
 
         // Mouse graphics
@@ -162,6 +192,7 @@ public class SimpController {
         view.gamePane.setOnMousePressed(actionEvent -> {
             if (model.player1Turn) {
                 // player1
+
                 // Clear map
                 model.drawGame(view.gc);
 
@@ -170,10 +201,14 @@ public class SimpController {
                         (int) actionEvent.getX(), (int) actionEvent.getY());
                 int velocity = model.calcDist(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
+                long wind = 0;
 
                 view.angle1Input.setText(String.valueOf(angle));
                 view.velocity1Input.setText(String.valueOf(velocity));
 
+                Shoot(angle, velocity, wind);
+
+                /*
                 int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit and inc score if hit
@@ -184,9 +219,11 @@ public class SimpController {
                     model.player2.score++;
                     view.player2Label.setText("Player 2 - Score: " + model.player2.score);
                 }
+                */
 
                 // Change turn
-                model.player1Turn = false;
+                // is in shoot now?
+                // model.player1Turn = false;
                 view.player1Controls.setDisable(true);
                 view.player2Controls.setDisable(false);
             } else {
@@ -199,9 +236,13 @@ public class SimpController {
                         (int) actionEvent.getX(), (int) actionEvent.getY());
                 int velocity = model.calcDist(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
+                long wind = 0;
 
                 view.angle2Input.setText(String.valueOf(angle));
                 view.velocity2Input.setText(String.valueOf(velocity));
+
+                Shoot(angle, velocity, wind);
+
 
                 int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
@@ -215,10 +256,82 @@ public class SimpController {
                 }
 
                 // Change turn
-                model.player1Turn = true;
+                // is in shoot now
+                // model.player1Turn = true;
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
         });
+    }
+
+    public void setEndControls() {
+        view.replayButton.setOnAction(actionEvent -> {
+            model.playerWin = 0;
+            model.player1.score = 0;
+            model.player2.score = 0;
+
+            view.setStartScene();
+            setStartControls();
+
+            stage.setTitle("SimpLauncher");
+            stage.setScene(view.startScene);
+            stage.show();
+        });
+    }
+
+
+    public void Shoot(int Angle, int Velocity, long Wind) {
+        // Clear map
+        model.drawGame(view.gc);
+
+        // Setup Parameters
+        boolean Player1Turn = model.player1Turn;
+        int lands = 0;
+
+        // Throw
+        if (Player1Turn) {
+            lands = model.player1.throwBanana(view.gc, Angle, Velocity, model.gameHeight);
+        }
+        else {
+            lands = model.player2.throwBanana(view.gc, Angle, Velocity, model.gameHeight);
+        }
+
+        // Check for hit
+        if (model.player2.isHit(lands, model.hitZone)) {
+            model.player1.score++;
+            view.player1Label.setText("Player 1 - Score: " + model.player1.score);
+        } else if (model.player1.isHit(lands, model.hitZone)) {
+            model.player2.score++;
+            view.player2Label.setText("Player 2 - Score: " + model.player2.score);
+        }
+
+        // Change turn
+        model.player1Turn = !Player1Turn;
+
+        // Win Condition
+        if (model.player1.score >= model.WinScoreCondition) {
+            model.playerWin = 1;
+
+            view.setEndScene(model.playerWin);
+            setEndControls();
+
+            stage.setTitle("SimpLauncher");
+            stage.setScene(view.endScene);
+            stage.show();
+        }
+        else if (model.player2.score >= model.WinScoreCondition) {
+            model.playerWin = 2;
+
+            view.setEndScene(model.playerWin);
+            setEndControls();
+
+            stage.setTitle("SimpLauncher");
+            stage.setScene(view.endScene);
+            stage.show();
+        }
+
+
+        // TODO: Save Game progress, in file
+        
     }
 }

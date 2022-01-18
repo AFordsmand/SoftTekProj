@@ -9,6 +9,8 @@ public class SimpModel {
     public int gameWidth, gameHeight;
     public int hitZone;
     public boolean player1Turn = true;
+    public int playerWin = 0;
+    public int WinScoreCondition = 10;
 
     public Gorilla player1;
     public Gorilla player2;
