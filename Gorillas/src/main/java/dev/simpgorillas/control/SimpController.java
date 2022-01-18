@@ -1,44 +1,43 @@
 package dev.simpgorillas.control;
 
 import dev.simpgorillas.model.SimpModel;
-import dev.simpgorillas.model.entities.Gorilla;
 import dev.simpgorillas.view.SimpView;
-import javafx.event.Event;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class SimpController {
 
-    // TODO change this
-    private SimpModel model;
-    private SimpView view;
-    private Stage stage;
+    public SimpModel model;
+    public SimpView view;
+    public Stage stage;
 
-    public SimpController(SimpView view, SimpModel model, Stage stage){
-        this.view = view;
+    public SimpController(SimpModel model, SimpView view, Stage stage){
         this.model = model;
+        this.view = view;
         this.stage = stage;
 
-        // TODO init stuff due to the order of calling and passing
+        view.setStartScene();
+        setStartControls(stage);
     }
 
 
 
-    public static void setStartControls(Stage stage) {
+    public void setStartControls(Stage stage) {
         // Get width and height (if legal) from startScene and set the stage's scene to gameScene
-        SimpView.playButton.setOnAction(actionEvent -> {
+        view.playButton.setOnAction(actionEvent -> {
             // Check widthInput and heightInput for legal values
             if (true) {
                 // Sets the width and height of the model, and
-                SimpModel.gameWidth = Integer.parseInt(SimpView.widthInput.getText());
-                SimpModel.gameHeight = Integer.parseInt(SimpView.heightInput.getText());
-                SimpModel.init();
+                model.gameWidth = Integer.parseInt(view.widthInput.getText());
+                model.gameHeight = Integer.parseInt(view.heightInput.getText());
+                model.init();
 
-                SimpView.setGameScene();
+                view.setGameScene(model.gameWidth, model.gameHeight);
+                model.drawGame(view.gc);
                 setGameControls(stage);
 
                 stage.setTitle("SimpGorillas!");
-                stage.setScene(SimpView.gameScene);
+                stage.setScene(view.gameScene);
                 stage.centerOnScreen();
             } else {
                 // Make the view turn red or something
@@ -48,177 +47,177 @@ public class SimpController {
 
     }
 
-    public static void setGameControls(Stage stage) {
-        SimpView.throwBtn1.setOnAction(actionEvent -> {
-            if (SimpModel.player1Turn) {
+    public void setGameControls(Stage stage) {
+        view.throwBtn1.setOnAction(actionEvent -> {
+            if (model.player1Turn) {
                 // Clear map
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
                 // Check for legal values and throw banana
-                int angle = Integer.parseInt(SimpView.angle1Input.getText());
-                int velocity = Integer.parseInt(SimpView.velocity1Input.getText());
+                int angle = Integer.parseInt(view.angle1Input.getText());
+                int velocity = Integer.parseInt(view.velocity1Input.getText());
 
-                int lands = SimpModel.player1.throwBanana(SimpView.gc, angle, velocity);
+                int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit
-                if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player1.score++;
-                    SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
-                } else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player2.score++;
-                    SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
+                if (model.player2.isHit(lands, model.hitZone)) {
+                    model.player1.score++;
+                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
+                } else if (model.player1.isHit(lands, model.hitZone)) {
+                    model.player2.score++;
+                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
                 }
 
                 // Change turn
-                SimpModel.player1Turn = false;
-                SimpView.player1Controls.setDisable(true);
-                SimpView.player2Controls.setDisable(false);
+                model.player1Turn = false;
+                view.player1Controls.setDisable(true);
+                view.player2Controls.setDisable(false);
             }
         });
 
-        SimpView.throwBtn2.setOnAction(actionEvent -> {
-            if (!SimpModel.player1Turn) {
+        view.throwBtn2.setOnAction(actionEvent -> {
+            if (!model.player1Turn) {
                 // Clear map
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
                 // Check for legal values and throw banana
-                int angle = Integer.parseInt(SimpView.angle2Input.getText());
-                int velocity = Integer.parseInt(SimpView.velocity2Input.getText());
+                int angle = Integer.parseInt(view.angle2Input.getText());
+                int velocity = Integer.parseInt(view.velocity2Input.getText());
 
-                int lands = SimpModel.player2.throwBanana(SimpView.gc, angle, velocity);
+                int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit and inc score if hit
-                if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player2.score++;
-                    SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
-                } else if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player1.score++;
-                    SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
+                if (model.player1.isHit(lands, model.hitZone)) {
+                    model.player2.score++;
+                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
+                } else if (model.player2.isHit(lands, model.hitZone)) {
+                    model.player1.score++;
+                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
                 }
 
                 // Change turn
-                SimpModel.player1Turn = true;
-                SimpView.player1Controls.setDisable(false);
-                SimpView.player2Controls.setDisable(true);
+                model.player1Turn = true;
+                view.player1Controls.setDisable(false);
+                view.player2Controls.setDisable(true);
             }
 
 
         });
 
         // Mouse graphics
-        SimpView.gamePane.setOnMouseMoved(actionEvent -> {
-            if (SimpModel.player1Turn) {
+        view.gamePane.setOnMouseMoved(actionEvent -> {
+            if (model.player1Turn) {
                 // player1
                 // Draw the previous throw and the mouse graphics on top
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
-                if (!SimpView.angle2Input.getText().isEmpty() && !SimpView.velocity2Input.getText().isEmpty()) {
-                    int angle = Integer.parseInt(SimpView.angle2Input.getText());
-                    int velocity = Integer.parseInt(SimpView.velocity2Input.getText());
+                if (!view.angle2Input.getText().isEmpty() && !view.velocity2Input.getText().isEmpty()) {
+                    int angle = Integer.parseInt(view.angle2Input.getText());
+                    int velocity = Integer.parseInt(view.velocity2Input.getText());
 
-                    SimpModel.player2.throwBanana(SimpView.gc, angle, velocity);
+                    model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
                 }
 
-                SimpView.gc.setStroke(Color.rgb(200,0,0));
-                SimpView.gc.strokeLine(SimpModel.player1.centerX, SimpModel.player1.y,
+                view.gc.setStroke(Color.rgb(200,0,0));
+                view.gc.strokeLine(model.player1.centerX, model.player1.y,
                                        actionEvent.getX(), actionEvent.getY());
 
                 // Update the text fields to show current ang and vel
-                int angle = -1 * SimpModel.calcAngle(SimpModel.player1.centerX, SimpModel.player1.y,
+                int angle = -1 * model.calcAngle(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                int velocity = SimpModel.calcDist(SimpModel.player1.centerX, SimpModel.player1.y,
+                int velocity = model.calcDist(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
 
-                SimpView.angle1Input.setText(String.valueOf(angle));
-                SimpView.velocity1Input.setText(String.valueOf(velocity));
+                view.angle1Input.setText(String.valueOf(angle));
+                view.velocity1Input.setText(String.valueOf(velocity));
 
             } else {
                 // player2
                 // Draw the previous throw and the mouse graphics on top
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
-                if (!SimpView.angle1Input.getText().isEmpty() && !SimpView.velocity1Input.getText().isEmpty()) {
-                    int angle = Integer.parseInt(SimpView.angle1Input.getText());
-                    int velocity = Integer.parseInt(SimpView.velocity1Input.getText());
+                if (!view.angle1Input.getText().isEmpty() && !view.velocity1Input.getText().isEmpty()) {
+                    int angle = Integer.parseInt(view.angle1Input.getText());
+                    int velocity = Integer.parseInt(view.velocity1Input.getText());
 
-                    SimpModel.player1.throwBanana(SimpView.gc, angle, velocity);
+                    model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
                 }
 
-                SimpView.gc.setStroke(Color.RED);
-                SimpView.gc.strokeLine(SimpModel.player2.centerX,SimpModel.player2.y,
+                view.gc.setStroke(Color.RED);
+                view.gc.strokeLine(model.player2.centerX,model.player2.y,
                         actionEvent.getX(),actionEvent.getY());
 
                 // Update the text fields to show current ang and vel
-                int angle = SimpModel.calcAngle(SimpModel.player2.centerX, SimpModel.player2.y,
+                int angle = model.calcAngle(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                int velocity = SimpModel.calcDist(SimpModel.player2.centerX, SimpModel.player2.y,
+                int velocity = model.calcDist(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
 
-                SimpView.angle2Input.setText(String.valueOf(angle));
-                SimpView.velocity2Input.setText(String.valueOf(velocity));
+                view.angle2Input.setText(String.valueOf(angle));
+                view.velocity2Input.setText(String.valueOf(velocity));
             }
         });
 
         // Mouse control
-        SimpView.gamePane.setOnMousePressed(actionEvent -> {
-            if (SimpModel.player1Turn) {
+        view.gamePane.setOnMousePressed(actionEvent -> {
+            if (model.player1Turn) {
                 // player1
                 // Clear map
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
                 // Get input based on mouse pos and throw the banana
-                int angle = -1 * SimpModel.calcAngle(SimpModel.player1.centerX, SimpModel.player1.y,
+                int angle = -1 * model.calcAngle(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                int velocity = SimpModel.calcDist(SimpModel.player1.centerX, SimpModel.player1.y,
+                int velocity = model.calcDist(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
 
-                SimpView.angle1Input.setText(String.valueOf(angle));
-                SimpView.velocity1Input.setText(String.valueOf(velocity));
+                view.angle1Input.setText(String.valueOf(angle));
+                view.velocity1Input.setText(String.valueOf(velocity));
 
-                int lands = SimpModel.player1.throwBanana(SimpView.gc, angle, velocity);
+                int lands = model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit and inc score if hit
-                if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player1.score++;
-                    SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
-                } else if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player2.score++;
-                    SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
+                if (model.player2.isHit(lands, model.hitZone)) {
+                    model.player1.score++;
+                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
+                } else if (model.player1.isHit(lands, model.hitZone)) {
+                    model.player2.score++;
+                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
                 }
 
                 // Change turn
-                SimpModel.player1Turn = false;
-                SimpView.player1Controls.setDisable(true);
-                SimpView.player2Controls.setDisable(false);
+                model.player1Turn = false;
+                view.player1Controls.setDisable(true);
+                view.player2Controls.setDisable(false);
             } else {
                 // player2
                 // Clear map
-                SimpModel.drawGame(SimpView.gc);
+                model.drawGame(view.gc);
 
                 // Get input based on mouse pos and throw the banana
-                int angle = SimpModel.calcAngle(SimpModel.player2.centerX, SimpModel.player2.y,
+                int angle = model.calcAngle(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                int velocity = SimpModel.calcDist(SimpModel.player2.centerX, SimpModel.player2.y,
+                int velocity = model.calcDist(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
 
-                SimpView.angle2Input.setText(String.valueOf(angle));
-                SimpView.velocity2Input.setText(String.valueOf(velocity));
+                view.angle2Input.setText(String.valueOf(angle));
+                view.velocity2Input.setText(String.valueOf(velocity));
 
-                int lands = SimpModel.player2.throwBanana(SimpView.gc, angle, velocity);
+                int lands = model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
 
                 // Check for hit and inc score if hit
-                if (SimpModel.player1.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player2.score++;
-                    SimpView.player2Label.setText("Player 2 - Score: " + SimpModel.player2.score);
-                } else if (SimpModel.player2.isHit(lands, SimpModel.hitZone)) {
-                    SimpModel.player1.score++;
-                    SimpView.player1Label.setText("Player 1 - Score: " + SimpModel.player1.score);
+                if (model.player1.isHit(lands, model.hitZone)) {
+                    model.player2.score++;
+                    view.player2Label.setText("Player 2 - Score: " + model.player2.score);
+                } else if (model.player2.isHit(lands, model.hitZone)) {
+                    model.player1.score++;
+                    view.player1Label.setText("Player 1 - Score: " + model.player1.score);
                 }
 
                 // Change turn
-                SimpModel.player1Turn = true;
-                SimpView.player1Controls.setDisable(false);
-                SimpView.player2Controls.setDisable(true);
+                model.player1Turn = true;
+                view.player1Controls.setDisable(false);
+                view.player2Controls.setDisable(true);
             }
         });
     }

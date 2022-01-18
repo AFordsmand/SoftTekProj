@@ -1,6 +1,5 @@
 package dev.simpgorillas.view;
 
-import dev.simpgorillas.model.SimpModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -12,36 +11,35 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class SimpView {
 
     // Fields for StartScene
-    public static Scene startScene;
-    public static Label widthAndHeightText;
-    public static Label widthLabel;
-    public static Label heightLabel;
-    public static TextField widthInput, heightInput;
-    public static Button playButton;
-    public static HBox widthNode;
-    public static HBox heightNode;
-    public static VBox startPane;
+    public Scene startScene;
+    public Label widthAndHeightText;
+    public Label widthLabel;
+    public Label heightLabel;
+    public TextField widthInput, heightInput;
+    public Button playButton;
+    public HBox widthNode;
+    public HBox heightNode;
+    public VBox startPane;
 
     // Fields for GameScene
-    public static Scene gameScene;
-    public static Canvas canvas;
-    public static Group gamePane;
-    public static GraphicsContext gc;
-    public static VBox player1Controls, player2Controls;
-    public static Button throwBtn1, throwBtn2;
-    public static HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
-    public static Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
-    public static TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
+    public Scene gameScene;
+    public Canvas canvas;
+    public Group gamePane;
+    public GraphicsContext gc;
+    public VBox player1Controls, player2Controls;
+    public Button throwBtn1, throwBtn2;
+    public HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
+    public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
+    public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
 
 
 
-    public static void setStartScene() {
+    public void setStartScene() {
         widthAndHeightText = new Label("Set the width and height of the game to start playing SimpGorillas!");
         widthAndHeightText.setWrapText(true);
         widthAndHeightText.setFont(Font.font(14));
@@ -72,14 +70,14 @@ public class SimpView {
         startScene = new Scene(startPane, 300, 250);
     }
 
-    public static void setGameScene() {
+    public void setGameScene(int gameWidth, int gameHeight) {
         gamePane = new Group();
-        canvas = new Canvas(SimpModel.gameWidth, SimpModel.gameHeight);
+        canvas = new Canvas(gameWidth, gameHeight);
         gc = canvas.getGraphicsContext2D();
         gamePane.getChildren().add(canvas);
 
         player1Controls = new VBox();
-        player1Label = new Label("Player 1 - Score: " + SimpModel.player1.score);
+        player1Label = new Label("Player 1 - Score: " + 0);
         angle1Node = new HBox();
         angle1Label = new Label("Angle: ");
         angle1Input = new TextField();
@@ -97,7 +95,7 @@ public class SimpView {
         player1Controls.setSpacing(5);
 
         player2Controls = new VBox();
-        player2Label = new Label("Player 2 - Score: " + SimpModel.player2.score);
+        player2Label = new Label("Player 2 - Score: " + 0);
         angle2Node = new HBox();
         angle2Label = new Label("Angle: ");
         angle2Input = new TextField();
@@ -118,20 +116,11 @@ public class SimpView {
         player1Controls.setLayoutX(0);
         player1Controls.setLayoutY(0);
 
-        player2Controls.setLayoutX(SimpModel.gameWidth - 135);
+        player2Controls.setLayoutX(gameWidth - 135);
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
         gamePane.getChildren().addAll(player1Controls, player2Controls);
-
-        // Går det i controls
-        /*if (SimpModel.player1Turn) {
-            player2Controls.setDisable(true);
-        } else {
-            player1Controls.setDisable(true);
-        }*/
-
-        SimpModel.drawGame(gc);
 
         gameScene = new Scene(gamePane);
     }
