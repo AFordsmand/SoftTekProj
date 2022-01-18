@@ -194,11 +194,19 @@ public class SimpController {
     }
 
     public static void setEndControls(Stage stage) {
-        
+        SimpView.replayButton.setOnAction(actionEvent -> {
+            SimpModel.playerWin = 0;
+            SimpModel.player1.score = 0;
+            SimpModel.player2.score = 0;
 
+            SimpView.setStartScene();
+            SimpController.setStartControls(stage);
 
+            stage.setTitle("SimpLauncher");
+            stage.setScene(SimpView.startScene);
+            stage.show();
 
-
+        });
     }
 
 
@@ -254,7 +262,6 @@ public class SimpController {
 
 
         // TODO: Save Game progress, in file
-        
         
     }
 }
