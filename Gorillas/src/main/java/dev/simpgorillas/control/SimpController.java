@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
-
+import java.io.FileOutputStream;
 
 public class SimpController {
 
@@ -35,6 +35,8 @@ public class SimpController {
                 model.gameHeight = Integer.parseInt(view.heightInput.getText());
                 model.init();
 
+                model.gameLog = model.gameWidth + " " + model.gameHeight;
+
                 view.setGameScene(model.gameWidth, model.gameHeight);
                 model.drawGame(view.gc);
                 setGameControls();
@@ -48,9 +50,9 @@ public class SimpController {
 
         });
 
-        final FileChooser fileChooser = new FileChooser();
-
         view.fileButton.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+
             File file = fileChooser.showOpenDialog(stage);
 
             if (file != null) {
@@ -209,8 +211,23 @@ public class SimpController {
             stage.setScene(view.startScene);
             stage.centerOnScreen();
         });
-    }
 
+        view.saveButton.setOnAction(actionEvent -> {
+            // TODO: Save game
+            FileChooser fileChooser = new FileChooser();
+
+            File file = fileChooser.showSaveDialog(stage);
+
+            try {
+                FileOutputStream fout = new FileOutputStream(file);
+                fout.write(model.gameLog.getBytes());
+                fout.close();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
+        });
+    }
 
     public void Shoot(int Angle, int Velocity, long Wind) {
         // Clear map
@@ -264,6 +281,7 @@ public class SimpController {
 
 
         // TODO: Save Game progress, in file
+        model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
         
     }
 }

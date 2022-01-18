@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="074800d4-73cd-4bb4-a526-b5115d374e8e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/SimpLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/SimpLauncher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/control/SimpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/control/SimpController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/model/SimpModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/model/SimpModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/view/SimpView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/simpgorillas/view/SimpView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
