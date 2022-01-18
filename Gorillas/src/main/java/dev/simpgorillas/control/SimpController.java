@@ -62,21 +62,21 @@ public class SimpController {
                     Scanner fileReader = new Scanner(file);
                     if (fileReader.hasNextLine()) {
                         String input = fileReader.nextLine();
-                        SimpModel.gameWidth = Integer.parseInt(input.split(" ")[0]);
-                        SimpModel.gameHeight = Integer.parseInt(input.split(" ")[1]);
-                        SimpModel.init();
+                        model.gameWidth = Integer.parseInt(input.split(" ")[0]);
+                        model.gameHeight = Integer.parseInt(input.split(" ")[1]);
+                        model.init();
+                        view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
                     }
 
-                    SimpModel.gameLog = SimpModel.gameWidth + " " + SimpModel.gameHeight;
+                    model.gameLog = model.gameWidth + " " + model.gameHeight;
 
-                    SimpView.setGameScene();
 
                     stage.setTitle("SimpGorillas!");
-                    stage.setScene(View.gameScene);
+                    stage.setScene(view.gameScene);
                     stage.centerOnScreen();
-                    SimpModel.drawGame(View.gc);
+                    model.drawGame(view.gc);
 
-                    while (fileReader.hasNextLine()) {
+                    while (fileReader.hasNextLine() && false) {
                         Thread.sleep(1000);
                         String input = fileReader.nextLine();
                         int Angle = Integer.parseInt(input.split(" ")[0]);
@@ -101,7 +101,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -116,7 +116,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 // Change turn
                 // is in shoot now?
@@ -195,7 +195,7 @@ public class SimpController {
                 view.angle1Input.setText(String.valueOf(angle));
                 view.velocity1Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -213,7 +213,7 @@ public class SimpController {
                 view.angle2Input.setText(String.valueOf(angle));
                 view.velocity2Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity, wind, stage);
 
                 // Change turn
                 view.player1Controls.setDisable(false);
@@ -232,7 +232,7 @@ public class SimpController {
             setStartControls();
 
             stage.setTitle("SimpLauncher");
-            stage.setScene(SimpView.startScene);
+            stage.setScene(view.startScene);
             stage.setScene(view.startScene);
             stage.centerOnScreen();
         });
@@ -253,7 +253,7 @@ public class SimpController {
         });
     }
 
-    public void Shoot(int Angle, int Velocity, long Wind) {
+    public void Shoot(int Angle, int Velocity, long Wind, Stage stage) {
         // Clear map
         model.drawGame(view.gc);
 
@@ -300,7 +300,7 @@ public class SimpController {
             setEndControls();
 
             stage.setTitle("SimpLauncher");
-            stage.setScene(SimpView.endScene);
+            stage.setScene(view.endScene);
             stage.setScene(view.endScene);
             stage.centerOnScreen();
             stage.show();

@@ -18,7 +18,7 @@ public class SimpLauncher extends Application {
 
         stage.setResizable(false);
         stage.setTitle("SimpLauncher");
-        stage.setScene(SimpView.startScene);
+        stage.setScene(view.startScene);
         stage.setScene(view.startScene);
         stage.centerOnScreen();
         stage.show();
