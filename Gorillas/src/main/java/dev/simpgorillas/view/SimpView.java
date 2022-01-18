@@ -38,6 +38,7 @@ public class SimpView {
     public HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
     public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
     public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
+    public TextField timer;
 
     // Fields for EndScene
     public Scene endScene;
