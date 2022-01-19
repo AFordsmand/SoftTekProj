@@ -12,7 +12,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
-import java.lang.Thread;
+//import java.lang.Thread;
 import java.util.Timer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -92,6 +92,7 @@ public class SimpController {
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
                     model.drawGame(view.gc);
+                    setGameControls();
                     view.player1Controls.setDisable(true);
                     view.player2Controls.setDisable(true);
 
@@ -99,11 +100,11 @@ public class SimpController {
                     model.replayer = fileReader;
                    
                     // Define a new animation
-                    Timeline timeline = new Timeline();
-                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    Timeline replay = new Timeline();
+                    replay.setCycleCount(Timeline.INDEFINITE);
                    
                     // Add a Shoot event to the animation as a frame
-                    timeline.getKeyFrames().add(
+                    replay.getKeyFrames().add(
                             new KeyFrame(
                                 // interval between frames.
                                 Duration.millis(1000), 
@@ -129,7 +130,7 @@ public class SimpController {
                                         else {
                                             // If there are no more lines in file, 
                                             // Stop timeline and restore player control
-                                            timeline.stop();
+                                            replay.stop();
                                             setGameControls();
                                             view.player1Controls.setDisable(!model.player1Turn);
                                             view.player2Controls.setDisable(model.player1Turn);
@@ -140,7 +141,7 @@ public class SimpController {
                     );
 
                     // Play the animation
-                    timeline.play();
+                    replay.play();
 
                 } catch(Exception e){
                     e.printStackTrace();
@@ -150,7 +151,7 @@ public class SimpController {
     }
 
     public void setGameControls() {
-        // Timer
+        // Timer 
         model.timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     model.secondsPassed++;
