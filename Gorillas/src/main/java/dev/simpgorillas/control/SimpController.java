@@ -12,7 +12,6 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
-//import java.lang.Thread;
 import java.util.Timer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -70,6 +69,11 @@ public class SimpController {
             // Get a File to read
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
+
+            // Stop timer
+            if (model.timeline != null) {
+                model.timeline.stop();
+            }
             
             // If a file was chosen
             if (file != null) {
@@ -92,7 +96,6 @@ public class SimpController {
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
                     model.drawGame(view.gc);
-                    setGameControls();
                     view.player1Controls.setDisable(true);
                     view.player2Controls.setDisable(true);
 
@@ -131,9 +134,9 @@ public class SimpController {
                                             // If there are no more lines in file, 
                                             // Stop timeline and restore player control
                                             replay.stop();
-                                            setGameControls();
                                             view.player1Controls.setDisable(!model.player1Turn);
                                             view.player2Controls.setDisable(model.player1Turn);
+                                            setGameControls();
                                         }
                                     }
                                 }
@@ -287,7 +290,9 @@ public class SimpController {
 
     public void setEndControls() {
         // Stop timer
-        model.timeline.stop();
+        if (model.timeline != null) {
+            model.timeline.stop();
+        }
 
         // PLay Again, got to start screen and reset variables
         view.replayButton.setOnAction(actionEvent -> {
