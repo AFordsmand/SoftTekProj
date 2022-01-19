@@ -57,6 +57,7 @@ public class SimpController {
 
         });
 
+        // Load replay of a Game
         view.fileButton.setOnAction(actionEvent -> {
 
             // Get a File to read
@@ -268,6 +269,8 @@ public class SimpController {
     }
 
     public void setEndControls() {
+
+        // PLay Again, got to start screen and reset variables
         view.replayButton.setOnAction(actionEvent -> {
             model.playerWin = 0;
             model.player1.score = 0;
@@ -281,11 +284,14 @@ public class SimpController {
             stage.centerOnScreen();
         });
 
+        // Save gameLog to file chosen using explorer
         view.saveButton.setOnAction(actionEvent -> {
-            // TODO: Save game
+
+            // Get save location
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showSaveDialog(stage);
 
+            // Save gameLog to location
             try {
                 FileOutputStream fout = new FileOutputStream(file);
                 fout.write(model.gameLog.getBytes());
