@@ -75,7 +75,9 @@ public class SimpController {
                         model.gameWidth = Integer.parseInt(input.split(" ")[0]);
                         model.gameHeight = Integer.parseInt(input.split(" ")[1]);
                         model.init();
-                        view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
+                        view.setGameScene(
+                                Integer.parseInt(input.split(" ")[0]), 
+                                Integer.parseInt(input.split(" ")[1]));
                     }
 
                     // Setup the game, and disable controls.
