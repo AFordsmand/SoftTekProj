@@ -66,6 +66,7 @@ public class SimpController {
             // Get a File to read
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
+
             // Stop timer
             if (model.timeline != null) {
                 model.timeline.stop();
