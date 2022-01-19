@@ -57,6 +57,10 @@ public class SimpController {
             } else {
                 // Make the view turn red or something
             }
+            model.wind.isWind = Integer.parseInt(view.windInput.getText());
+            model.wind.setWind();
+            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
+
 
         });
 
@@ -344,9 +348,13 @@ public class SimpController {
         if (model.player2.isHit(lands, model.hitZone)) {
             model.player1.score++;
             view.player1Label.setText("Player 1 - Score: " + model.player1.score);
+            model.wind.setWind();
+            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
         } else if (model.player1.isHit(lands, model.hitZone)) {
             model.player2.score++;
             view.player2Label.setText("Player 2 - Score: " + model.player2.score);
+            model.wind.setWind();
+            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
         }
 
         // Change turn
