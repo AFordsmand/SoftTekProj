@@ -93,35 +93,42 @@ public class SimpController {
                     Timeline timeline = new Timeline();
                     timeline.setCycleCount(Timeline.INDEFINITE);
                    
-                    // Shoot event, will read the angle, velocity and wind from fileReader in model
-                    // And shoot with the given parameters
-                    EventHandler shooter = new EventHandler<ActionEvent>(){
-                            public void handle(ActionEvent t) {
-                                Scanner fileReader = model.replayer;
-                                if (fileReader.hasNextLine()) {
-                                    String input = fileReader.nextLine();
-                                    int Angle = Integer.parseInt(input.split(" ")[0]);
-                                    int Velocity = Integer.parseInt(input.split(" ")[1]);
-                                    int Wind = Integer.parseInt(input.split(" ")[2]);
+                    // Add a Shoot event to the animation as a frame
+                    timeline.getKeyFrames().add(
+                            new KeyFrame(
+                                // interval between frames.
+                                Duration.millis(1000), 
 
-                                    Shoot(Angle, Velocity, Wind);
-                                    model.replayer = fileReader;
-                                }
-                                else {
-                                    // If there are no more lines in file,
-                                    // Then stop the animation and enable controls depending on whose turn it is
-                                    timeline.stop();
-                                    setGameControls();
-                                    view.player1Controls.setDisable(!model.player1Turn);
-                                    view.player2Controls.setDisable(model.player1Turn);
-                                }
-                            }
-                    };
+                                // Shoot event 
+                                // NOTE: Had to be defined like this, otherwise it cause a unsecure warning
+                                new EventHandler<ActionEvent>(){
+                                    public void handle(ActionEvent t) {
+                                        Scanner fileReader = model.replayer;
+                                        if (fileReader.hasNextLine()) {
+                                            // Get Line
+                                            String input = fileReader.nextLine();
 
-                    // Define the interval between shooting.
-                    timeline.getKeyFrames().add(new KeyFrame(
-                        Duration.millis(1000), shooter
-                    ));
+                                            // Get variables from file
+                                            int Angle = Integer.parseInt(input.split(" ")[0]);
+                                            int Velocity = Integer.parseInt(input.split(" ")[1]);
+                                            int Wind = Integer.parseInt(input.split(" ")[2]);
+                                            
+                                            // Shoot
+                                            Shoot(Angle, Velocity, Wind);
+                                            model.replayer = fileReader;
+                                        }
+                                        else {
+                                            // If there are no more lines in file, 
+                                            // Stop timeline and restore player control
+                                            timeline.stop();
+                                            setGameControls();
+                                            view.player1Controls.setDisable(!model.player1Turn);
+                                            view.player2Controls.setDisable(model.player1Turn);
+                                        }
+                                    }
+                                }
+                        )
+                    );
 
                     // Play the animation
                     timeline.play();
