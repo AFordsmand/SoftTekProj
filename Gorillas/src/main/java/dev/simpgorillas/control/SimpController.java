@@ -2,9 +2,6 @@ package dev.simpgorillas.control;
 
 import dev.simpgorillas.model.SimpModel;
 import dev.simpgorillas.view.SimpView;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -69,7 +66,6 @@ public class SimpController {
             // Get a File to read
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
-
             // Stop timer
             if (model.timeline != null) {
                 model.timeline.stop();
