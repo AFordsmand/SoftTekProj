@@ -5,7 +5,10 @@ import dev.simpgorillas.view.SimpView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -41,9 +44,25 @@ public class SimpController {
     public void setStartControls() {
         // Get width and height (if legal) from startScene and set the stage's scene to gameScene
         view.playButton.setOnAction(actionEvent -> {
+            // Get screen dim
+
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            double screenWidth = screenBounds.getWidth();
+            double screenHeight = screenBounds.getHeight();
+
             // Check widthInput and heightInput for legal values
-            if (true) {
-                // Sets the width and height of the model, and
+            // TODO: set max and min screen sizes
+            // TODO: check for empty input in throw controls
+            // TODO: set points to win
+            // TODO: set gravity
+            // TODO: SimpGorillas
+
+
+
+            boolean posInts = model.isPosInt(view.widthInput.getText()) && model.isPosInt(view.heightInput.getText());
+
+            if (posInts) {
+                // Sets the width and height of the model
                 model.gameWidth = Integer.parseInt(view.widthInput.getText());
                 model.gameHeight = Integer.parseInt(view.heightInput.getText());
                 model.init();
@@ -59,9 +78,21 @@ public class SimpController {
                 stage.setScene(view.gameScene);
                 stage.centerOnScreen();
             } else {
-                // Make the view turn red or something
+                if (!model.isPosInt(view.widthInput.getText())) {
+                    view.widthInput.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                            BorderWidths.DEFAULT)));
+                } else {
+                    view.widthInput.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                            BorderWidths.DEFAULT)));
+                }
+                if (!model.isPosInt(view.heightInput.getText())) {
+                    view.heightInput.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                            BorderWidths.DEFAULT)));
+                } else {
+                    view.heightInput.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                            BorderWidths.DEFAULT)));
+                }
             }
-
         });
 
         // Load replay of a Game
@@ -86,7 +117,7 @@ public class SimpController {
                         view.setGameScene();
                     }
 
-                    // Setup the game, and disable controls.
+                    // Set up the game, and disable controls.
                     model.gameLog = model.gameWidth + " " + model.gameHeight;
                     stage.setTitle("SimpGorillas!");
                     stage.setScene(view.gameScene);

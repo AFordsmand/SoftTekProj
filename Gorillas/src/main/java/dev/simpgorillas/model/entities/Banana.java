@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 public class Banana {
 
     private double x, y, angle, velocity, dir;
-    private final double grav = 9.81;
+    private double grav = 9.81;
     private Color bananaYellow = Color.rgb(255, 221, 0);
 
     public Banana(double angle, double velocity, double dir) {
