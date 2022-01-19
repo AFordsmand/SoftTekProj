@@ -8,14 +8,10 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
-import java.lang.Thread;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 
 public class SimpController {
