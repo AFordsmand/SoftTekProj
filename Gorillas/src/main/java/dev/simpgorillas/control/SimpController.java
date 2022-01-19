@@ -9,12 +9,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.lang.Thread;
 import java.util.Timer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 
 public class SimpController {
 
@@ -43,6 +48,7 @@ public class SimpController {
                 model.gameHeight = Integer.parseInt(view.heightInput.getText());
                 model.init();
 
+                // Setup gameLog
                 model.gameLog = model.gameWidth + " " + model.gameHeight;
 
                 view.setGameScene();
@@ -58,40 +64,83 @@ public class SimpController {
 
         });
 
+        // Load replay of a Game
         view.fileButton.setOnAction(actionEvent -> {
+
+            // Get a File to read
             FileChooser fileChooser = new FileChooser();
-
             File file = fileChooser.showOpenDialog(stage);
-
+            
+            // If a file was chosen
             if (file != null) {
                 try {
                     Scanner fileReader = new Scanner(file);
+
+                    // Get gameWidth and gameHeight from the first line in the file and open the game
                     if (fileReader.hasNextLine()) {
                         String input = fileReader.nextLine();
                         model.gameWidth = Integer.parseInt(input.split(" ")[0]);
                         model.gameHeight = Integer.parseInt(input.split(" ")[1]);
                         model.init();
+
                         view.setGameScene();
-                        //view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
                     }
 
+                    // Setup the game, and disable controls.
                     model.gameLog = model.gameWidth + " " + model.gameHeight;
-
-
                     stage.setTitle("SimpGorillas!");
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
                     model.drawGame(view.gc);
+                    view.player1Controls.setDisable(true);
+                    view.player2Controls.setDisable(true);
 
-                    while (fileReader.hasNextLine() && false) {
-                        Thread.sleep(1000);
-                        String input = fileReader.nextLine();
-                        int Angle = Integer.parseInt(input.split(" ")[0]);
-                        int Velocity = Integer.parseInt(input.split(" ")[1]);
-                        int Wind = Integer.parseInt(input.split(" ")[2]);
+                    // Save the fileReader in the model for later
+                    model.replayer = fileReader;
+                   
+                    // Define a new animation
+                    Timeline timeline = new Timeline();
+                    timeline.setCycleCount(Timeline.INDEFINITE);
+                   
+                    // Add a Shoot event to the animation as a frame
+                    timeline.getKeyFrames().add(
+                            new KeyFrame(
+                                // interval between frames.
+                                Duration.millis(1000), 
 
-                        Shoot(Angle, Velocity, Wind);
-                    }
+                                // Shoot event 
+                                // NOTE: Had to be defined like this, otherwise it cause a unsecure warning
+                                new EventHandler<ActionEvent>(){
+                                    public void handle(ActionEvent t) {
+                                        Scanner fileReader = model.replayer;
+                                        if (fileReader.hasNextLine()) {
+                                            // Get Line
+                                            String input = fileReader.nextLine();
+
+                                            // Get variables from file
+                                            int Angle = Integer.parseInt(input.split(" ")[0]);
+                                            int Velocity = Integer.parseInt(input.split(" ")[1]);
+                                            int Wind = Integer.parseInt(input.split(" ")[2]);
+                                            
+                                            // Shoot
+                                            Shoot(Angle, Velocity, Wind);
+                                            model.replayer = fileReader;
+                                        }
+                                        else {
+                                            // If there are no more lines in file, 
+                                            // Stop timeline and restore player control
+                                            timeline.stop();
+                                            setGameControls();
+                                            view.player1Controls.setDisable(!model.player1Turn);
+                                            view.player2Controls.setDisable(model.player1Turn);
+                                        }
+                                    }
+                                }
+                        )
+                    );
+
+                    // Play the animation
+                    timeline.play();
 
                 } catch(Exception e){
                     e.printStackTrace();
@@ -134,7 +183,6 @@ public class SimpController {
 
                 Shoot(angle, velocity, wind);
 
-                // Change turn
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
             }
@@ -240,6 +288,7 @@ public class SimpController {
         // Stop timer
         model.timeline.stop();
 
+        // PLay Again, got to start screen and reset variables
         view.replayButton.setOnAction(actionEvent -> {
             model.playerWin = 0;
             model.player1.score = 0;
@@ -253,11 +302,14 @@ public class SimpController {
             stage.centerOnScreen();
         });
 
+        // Save gameLog to file chosen using explorer
         view.saveButton.setOnAction(actionEvent -> {
-            // TODO: Save game
+
+            // Get save location
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showSaveDialog(stage);
 
+            // Save gameLog to location
             try {
                 FileOutputStream fout = new FileOutputStream(file);
                 fout.write(model.gameLog.getBytes());
@@ -303,6 +355,7 @@ public class SimpController {
 
             view.setEndScene();
             setEndControls();
+            model.player1Turn = true;
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
@@ -313,15 +366,14 @@ public class SimpController {
 
             view.setEndScene();
             setEndControls();
+            model.player1Turn = true;
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
             stage.centerOnScreen();
         }
 
-
-        // TODO: Save Game progress, in file
+        // Save shot in the gameLog
         model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
-        
     }
 }

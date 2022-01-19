@@ -5,7 +5,6 @@ import dev.simpgorillas.model.SimpModel;
 import dev.simpgorillas.view.SimpView;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class SimpLauncher extends Application {
