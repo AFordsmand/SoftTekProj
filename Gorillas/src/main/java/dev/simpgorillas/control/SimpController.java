@@ -2,13 +2,19 @@ package dev.simpgorillas.control;
 
 import dev.simpgorillas.model.SimpModel;
 import dev.simpgorillas.view.SimpView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.lang.Thread;
+import java.util.Timer;
 
 public class SimpController {
 
@@ -39,7 +45,7 @@ public class SimpController {
 
                 model.gameLog = model.gameWidth + " " + model.gameHeight;
 
-                view.setGameScene(model.gameWidth, model.gameHeight);
+                view.setGameScene();
                 model.drawGame(view.gc);
                 setGameControls();
 
@@ -65,7 +71,8 @@ public class SimpController {
                         model.gameWidth = Integer.parseInt(input.split(" ")[0]);
                         model.gameHeight = Integer.parseInt(input.split(" ")[1]);
                         model.init();
-                        view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
+                        view.setGameScene();
+                        //view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
                     }
 
                     model.gameLog = model.gameWidth + " " + model.gameHeight;
@@ -94,6 +101,15 @@ public class SimpController {
     }
 
     public void setGameControls() {
+        // Timer
+        model.timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> {
+                    model.secondsPassed++;
+                    view.timer.setText(model.formatTime());
+        }));
+        model.timeline.setCycleCount(Timeline.INDEFINITE);
+        model.timeline.play();
+
         view.throwBtn1.setOnAction(actionEvent -> {
             if (model.player1Turn) {
                 // Check for legal values and throw banana
@@ -221,6 +237,9 @@ public class SimpController {
     }
 
     public void setEndControls() {
+        // Stop timer
+        model.timeline.stop();
+
         view.replayButton.setOnAction(actionEvent -> {
             model.playerWin = 0;
             model.player1.score = 0;
@@ -282,7 +301,7 @@ public class SimpController {
         if (model.player1.score >= model.WinScoreCondition) {
             model.playerWin = 1;
 
-            view.setEndScene(model.playerWin);
+            view.setEndScene();
             setEndControls();
 
             stage.setTitle("SimpLauncher");
@@ -292,7 +311,7 @@ public class SimpController {
         else if (model.player2.score >= model.WinScoreCondition) {
             model.playerWin = 2;
 
-            view.setEndScene(model.playerWin);
+            view.setEndScene();
             setEndControls();
 
             stage.setTitle("SimpLauncher");

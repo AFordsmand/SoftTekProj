@@ -13,7 +13,7 @@ public class SimpLauncher extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         SimpModel model = new SimpModel();
-        SimpView view = new SimpView();
+        SimpView view = new SimpView(model);
         new SimpController(model, view, stage);
 
         stage.setResizable(false);

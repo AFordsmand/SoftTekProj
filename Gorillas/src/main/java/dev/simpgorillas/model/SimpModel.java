@@ -1,10 +1,9 @@
 package dev.simpgorillas.model;
 
 import dev.simpgorillas.model.entities.Gorilla;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.util.Timer;
 
 public class SimpModel {
 
@@ -18,7 +17,8 @@ public class SimpModel {
     public Gorilla player1;
     public Gorilla player2;
 
-    public Timer time;
+    public int secondsPassed;
+    public Timeline timeline;
 
 
     public void init() {
@@ -26,6 +26,8 @@ public class SimpModel {
         player2 = new Gorilla(gameWidth - Gorilla.WIDTH, gameHeight - Gorilla.HEIGHT, false);
 
         hitZone = gameWidth / 50;
+
+        secondsPassed = 0;
     }
 
     public void drawGame(GraphicsContext gc) {
@@ -36,11 +38,28 @@ public class SimpModel {
         player2.render(gc);
     }
 
-    public int calcDist(int x1, int y1, int x2, int y2) {
+    public String formatTime() {
+        String minStr = String.format("%02d", secondsPassed / 60 % 60);
+        String secStr = String.format("%02d", secondsPassed % 60);
+        return minStr + ":" + secStr;
+    }
+
+    public int calcDist(double x1, double y1, double x2, double y2) {
         return (int) Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow(((y2 - y1)), 2));
     }
 
     public int calcAngle(double x1, double y1, double x2, double y2) {
+        /*
+        double dot = x2 - x1;
+        double cross = y2 - y1;
+        double mag = calcDist(x1, y1, x2, y2);
+
+        double cos = dot / mag;
+        System.out.println(cos);
+        System.out.println(Math.toDegrees(Math.acos(cos)));
+        System.out.println(Math.toDegrees(Math.atan2(Math.abs(cross), dot)));
+        */
+
         return (int) Math.toDegrees(Math.atan((y2 - y1) / (x2 - x1)));
     }
 }

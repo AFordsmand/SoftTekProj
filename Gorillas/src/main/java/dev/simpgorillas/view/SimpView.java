@@ -1,5 +1,6 @@
 package dev.simpgorillas.view;
 
+import dev.simpgorillas.model.SimpModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -38,7 +39,7 @@ public class SimpView {
     public HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
     public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
     public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
-    public TextField timer;
+    public Label timer;
 
     // Fields for EndScene
     public Scene endScene;
@@ -46,6 +47,13 @@ public class SimpView {
     public Label winLabel;
     public Button saveButton;
     public Button replayButton;
+
+    public SimpModel model;
+
+    public SimpView(SimpModel model) {
+        this.model = model;
+    }
+
 
 
     public void setStartScene() {
@@ -81,9 +89,9 @@ public class SimpView {
         startScene = new Scene(startPane, 300, 250);
     }
 
-    public void setGameScene(int gameWidth, int gameHeight) {
+    public void setGameScene() {
         gamePane = new Group();
-        canvas = new Canvas(gameWidth, gameHeight);
+        canvas = new Canvas(model.gameWidth, model.gameHeight);
         gc = canvas.getGraphicsContext2D();
         gamePane.getChildren().add(canvas);
 
@@ -123,21 +131,25 @@ public class SimpView {
         player2Controls.setPadding(new Insets(5));
         player2Controls.setSpacing(5);
 
-
         player1Controls.setLayoutX(0);
         player1Controls.setLayoutY(0);
 
-        player2Controls.setLayoutX(gameWidth - 135);
+        player2Controls.setLayoutX(model.gameWidth - 135);
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
-        gamePane.getChildren().addAll(player1Controls, player2Controls);
+        // Timer
+        timer = new Label("00:00");
+        timer.setFont(Font.font(16));
+        timer.setLayoutX(model.gameWidth / 2f - 32);
+
+        gamePane.getChildren().addAll(player1Controls, player2Controls, timer);
 
         gameScene = new Scene(gamePane);
     }
 
-    public void setEndScene(int playerWin) {
-        winLabel = new Label("Player " + playerWin + " won!");
+    public void setEndScene() {
+        winLabel = new Label("Player " + model.playerWin + " won!");
         winLabel.setWrapText(true);
         winLabel.setFont(Font.font(35));
         winLabel.setAlignment(Pos.CENTER);
