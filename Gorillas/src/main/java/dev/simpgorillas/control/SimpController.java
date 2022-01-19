@@ -17,8 +17,6 @@ import javafx.util.Duration;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
 public class SimpController {
 
@@ -47,6 +45,7 @@ public class SimpController {
                 model.gameHeight = Integer.parseInt(view.heightInput.getText());
                 model.init();
 
+                // Setup gameLog
                 model.gameLog = model.gameWidth + " " + model.gameHeight;
 
                 view.setGameScene(model.gameWidth, model.gameHeight);
@@ -63,13 +62,17 @@ public class SimpController {
         });
 
         view.fileButton.setOnAction(actionEvent -> {
+
+            // Get a File to read
             FileChooser fileChooser = new FileChooser();
-
             File file = fileChooser.showOpenDialog(stage);
-
+            
+            // If a file was chosen
             if (file != null) {
                 try {
                     Scanner fileReader = new Scanner(file);
+
+                    // Get gameWidth and gameHeight from the first line in the file and open the game
                     if (fileReader.hasNextLine()) {
                         String input = fileReader.nextLine();
                         model.gameWidth = Integer.parseInt(input.split(" ")[0]);
@@ -78,9 +81,8 @@ public class SimpController {
                         view.setGameScene(Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
                     }
 
+                    // Setup the game, and disable controls.
                     model.gameLog = model.gameWidth + " " + model.gameHeight;
-
-
                     stage.setTitle("SimpGorillas!");
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
@@ -88,11 +90,15 @@ public class SimpController {
                     view.player1Controls.setDisable(true);
                     view.player2Controls.setDisable(true);
 
+                    // Save the fileReader in the model for later
                     model.replayer = fileReader;
-                    
+                   
+                    // Define a new animation
                     Timeline timeline = new Timeline();
                     timeline.setCycleCount(Timeline.INDEFINITE);
-                    
+                   
+                    // Shoot event, will read the angle, velocity and wind from fileReader in model
+                    // And shoot with the given parameters
                     EventHandler shooter = new EventHandler<ActionEvent>(){
                             public void handle(ActionEvent t) {
                                 Scanner fileReader = model.replayer;
@@ -106,16 +112,22 @@ public class SimpController {
                                     model.replayer = fileReader;
                                 }
                                 else {
+                                    // If there are no more lines in file,
+                                    // Then stop the animation and enable controls depending on whose turn it is
                                     timeline.stop();
+                                    setGameControls();
+                                    view.player1Controls.setDisable(!model.player1Turn);
+                                    view.player2Controls.setDisable(model.player1Turn);
                                 }
                             }
                     };
 
-
+                    // Define the interval between shooting.
                     timeline.getKeyFrames().add(new KeyFrame(
                         Duration.millis(1000), shooter
                     ));
 
+                    // Play the animation
                     timeline.play();
 
                 } catch(Exception e){
@@ -316,6 +328,7 @@ public class SimpController {
 
             view.setEndScene(model.playerWin);
             setEndControls();
+            model.player1Turn = true;
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
@@ -326,15 +339,14 @@ public class SimpController {
 
             view.setEndScene(model.playerWin);
             setEndControls();
+            model.player1Turn = true;
 
             stage.setTitle("SimpLauncher");
             stage.setScene(view.endScene);
             stage.centerOnScreen();
         }
 
-
-        // TODO: Save Game progress, in file
+        // Save shot in the gameLog
         model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
-        
     }
 }
