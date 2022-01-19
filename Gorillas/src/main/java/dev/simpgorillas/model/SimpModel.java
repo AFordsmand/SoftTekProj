@@ -1,9 +1,11 @@
 package dev.simpgorillas.model;
 
 import dev.simpgorillas.model.entities.Gorilla;
+import dev.simpgorillas.model.entities.Wind;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
 import java.util.Scanner;
 
 public class SimpModel {
@@ -19,6 +21,8 @@ public class SimpModel {
     public Gorilla player1;
     public Gorilla player2;
 
+    public Wind wind;
+
     public int secondsPassed;
     public Timeline timeline;
 
@@ -30,6 +34,8 @@ public class SimpModel {
         hitZone = gameWidth / 50;
 
         secondsPassed = 0;
+
+        wind = new Wind();
     }
 
     public void drawGame(GraphicsContext gc) {

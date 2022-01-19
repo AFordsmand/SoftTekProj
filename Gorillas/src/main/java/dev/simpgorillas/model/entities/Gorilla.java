@@ -26,8 +26,8 @@ public class Gorilla {
         gc.fillRect(x, y, WIDTH, HEIGHT);
     }
 
-    public int throwBanana(GraphicsContext gc, double angle, double velocity, int gameHeight) {
-        Banana banana = new Banana(angle, velocity, dir);
+    public int throwBanana(GraphicsContext gc, double angle, double velocity, int gameHeight, double wind) {
+        Banana banana = new Banana(angle, velocity, dir, wind);
 
         double t = 0.01;
         while (true) {

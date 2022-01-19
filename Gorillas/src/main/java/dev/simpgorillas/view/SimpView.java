@@ -22,11 +22,14 @@ public class SimpView {
     public Label widthAndHeightText;
     public Label widthLabel;
     public Label heightLabel;
-    public TextField widthInput, heightInput;
+    public TextField widthInput, heightInput, windInput;
+    public Label windText;
+    public Label windOpText;
     public Button playButton;
     public Button fileButton;
     public HBox widthNode;
     public HBox heightNode;
+    public HBox windNode;
     public VBox startPane;
 
     // Fields for GameScene
@@ -34,10 +37,10 @@ public class SimpView {
     public Canvas canvas;
     public Group gamePane;
     public GraphicsContext gc;
-    public VBox player1Controls, player2Controls;
+    public VBox player1Controls, player2Controls, windControls;
     public Button throwBtn1, throwBtn2;
     public HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
-    public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label;
+    public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label, windLabel;
     public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
     public Label timer;
 
@@ -55,7 +58,6 @@ public class SimpView {
     }
 
 
-
     public void setStartScene() {
         widthAndHeightText = new Label("Set the width and height of the game to start playing SimpGorillas!");
         widthAndHeightText.setWrapText(true);
@@ -70,6 +72,13 @@ public class SimpView {
         heightInput = new TextField();
         heightInput.setPromptText("input height");
         heightInput.setMaxWidth(100);
+
+        windText = new Label("Would you like to play with wind?");
+        windOpText = new Label("1 = Yes & 0 = No");
+        windInput = new TextField();
+        windInput.setPromptText("input 1 or 0");
+        windInput.setMaxWidth(100);
+
         playButton = new Button("Play");
         fileButton = new Button("Replay a Game");
 
@@ -79,14 +88,17 @@ public class SimpView {
         heightNode = new HBox(heightLabel, heightInput);
         heightNode.setSpacing(5);
         heightNode.setAlignment(Pos.CENTER);
+        windNode = new HBox(windInput);
+        windNode.setSpacing(5);
+        windNode.setAlignment(Pos.CENTER);
 
         startPane = new VBox();
         startPane.setSpacing(20);
         startPane.setAlignment(Pos.CENTER);
         startPane.setPadding(new Insets(10));
-        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, playButton, fileButton);
+        startPane.getChildren().addAll(widthAndHeightText, widthNode, heightNode, windText, windOpText, windNode, playButton, fileButton);
 
-        startScene = new Scene(startPane, 300, 250);
+        startScene = new Scene(startPane, 300, 350);
     }
 
     public void setGameScene() {
@@ -131,6 +143,12 @@ public class SimpView {
         player2Controls.setPadding(new Insets(5));
         player2Controls.setSpacing(5);
 
+        windControls = new VBox();
+        windLabel = new Label(model.wind.windValue + " pixels pr. second");
+        windControls.getChildren().add(windLabel);
+        windControls.setPadding(new Insets(5));
+        windControls.setSpacing(5);
+
         player1Controls.setLayoutX(0);
         player1Controls.setLayoutY(0);
 
@@ -138,12 +156,15 @@ public class SimpView {
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
+        windControls.setLayoutX(model.gameWidth - (model.gameWidth/2)-70);
+        windControls.setLayoutY(25);
+
         // Timer
         timer = new Label("00:00");
         timer.setFont(Font.font(16));
         timer.setLayoutX(model.gameWidth / 2f - 32);
 
-        gamePane.getChildren().addAll(player1Controls, player2Controls, timer);
+        gamePane.getChildren().addAll(player1Controls, windControls, player2Controls, timer);
 
         gameScene = new Scene(gamePane);
     }
