@@ -21,7 +21,7 @@ public class Wind {
         } else if (windValue < 0){
             arrowDir = "<-";
         } else if (windValue == 0){
-            arrowDir = "0";
+            arrowDir = "-";
         }
     }
     
