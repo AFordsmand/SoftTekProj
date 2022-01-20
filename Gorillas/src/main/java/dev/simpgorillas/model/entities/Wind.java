@@ -3,6 +3,7 @@ package dev.simpgorillas.model.entities;
 public class Wind {
     public int isWind;
     public double windValue = 22;
+    public String arrowDir = "-";
 
 
 
@@ -14,4 +15,14 @@ public class Wind {
         }
         System.out.println(windValue + "\n");
     }
+    public void setArrowDir(){
+        if (windValue > 0){
+            arrowDir = "->";
+        } else if (windValue < 0){
+            arrowDir = "<-";
+        } else if (windValue == 0){
+            arrowDir = "0";
+        }
+    }
+    
 }
