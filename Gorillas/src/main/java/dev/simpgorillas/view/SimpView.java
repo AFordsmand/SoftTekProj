@@ -35,10 +35,10 @@ public class SimpView {
     public Canvas canvas;
     public Group gamePane;
     public GraphicsContext gc;
-    public VBox player1Controls, player2Controls, windControls;
+    public VBox player1Controls, player2Controls, windControls, arrowControls;
     public Button throwBtn1, throwBtn2;
     public HBox angle1Node, angle2Node, velocity1Node, velocity2Node;
-    public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label, windLabel;
+    public Label player2Label, player1Label, angle1Label, velocity1Label, angle2Label, velocity2Label, windLabel, arrowLabel;
     public TextField angle1Input, angle2Input, velocity1Input, velocity2Input;
     public Label timer;
     public Border greenBorder = new Border(new BorderStroke(
@@ -192,12 +192,6 @@ public class SimpView {
         player2Controls.setPadding(new Insets(5));
         player2Controls.setSpacing(5);
 
-        windControls = new VBox();
-        windLabel = new Label(model.wind.windValue + " pixels pr. second");
-        windControls.getChildren().add(windLabel);
-        windControls.setPadding(new Insets(5));
-        windControls.setSpacing(5);
-
         player1Controls.setLayoutX(0);
         player1Controls.setLayoutY(0);
 
@@ -205,15 +199,32 @@ public class SimpView {
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
+        // Wind
+        windControls = new VBox();
+        windLabel = new Label(Math.abs(model.wind.windValue) + " pixels pr. second");
+        windControls.getChildren().add(windLabel);
+        windControls.setPadding(new Insets(5));
+        windControls.setSpacing(5);
+        
+        arrowControls = new VBox();
+        arrowLabel = new Label(model.wind.arrowDir);
+        arrowLabel.setFont(Font.font(16));
+        arrowControls.getChildren().add(arrowLabel);
+        arrowControls.setPadding(new Insets(5));
+        arrowControls.setSpacing(5);
+        
         windControls.setLayoutX(model.gameWidth - (model.gameWidth/2f)-70);
         windControls.setLayoutY(25);
+        
+        arrowControls.setLayoutX(model.gameWidth - (model.gameWidth/2f)-30);
+        arrowControls.setLayoutY(50);
 
         // Timer
         timer = new Label("00:00");
         timer.setFont(Font.font(16));
         timer.setLayoutX(model.gameWidth / 2f - 32);
 
-        gamePane.getChildren().addAll(player1Controls, windControls, player2Controls, timer);
+        gamePane.getChildren().addAll(player1Controls, windControls, arrowControls, player2Controls, timer);
 
         gameScene = new Scene(gamePane);
     }
