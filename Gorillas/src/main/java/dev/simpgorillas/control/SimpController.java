@@ -79,8 +79,6 @@ public class SimpController {
                     model.winScoreCondition = Integer.parseInt(view.pointInput.getText());
                 }
 
-                // Set up gameLog
-                model.gameLog = model.gameWidth + " " + model.gameHeight;
 
                 view.setGameScene();
                 model.drawGame(view.gc);
@@ -93,6 +91,14 @@ public class SimpController {
                 // Wind
                 model.wind.isWind = Integer.parseInt(view.windInput.getText());
                 updateWind();
+
+                // Set up gameLog
+                model.gameLog = 
+                    model.gameWidth + " " +
+                    model.gameHeight + " " + 
+                    Banana.grav + " " + 
+                    model.winScoreCondition + " " +
+                    model.wind.isWind;
 
                 stage.setTitle("SimpGorillas!");
                 stage.setScene(view.gameScene);
@@ -151,15 +157,25 @@ public class SimpController {
                     // Get gameWidth and gameHeight from the first line in the file and open the game
                     if (fileReader.hasNextLine()) {
                         String input = fileReader.nextLine();
-                        model.gameWidth = Integer.parseInt(input.split(" ")[0]);
-                        model.gameHeight = Integer.parseInt(input.split(" ")[1]);
+                        String[] args = input.split(" ");
+                        model.gameWidth = Integer.parseInt(args[0]);
+                        model.gameHeight = Integer.parseInt(args[1]);
+                        Banana.grav = Double.parseDouble(args[2]);
+                        model.winScoreCondition = Integer.parseInt(args[3]);
                         model.init();
-
+                        model.wind.isWind = Integer.parseInt(args[4]);
                         view.setGameScene();
+
                     }
 
-                    // Set up the game, and disable controls.
-                    model.gameLog = model.gameWidth + " " + model.gameHeight;
+                    // Set up gameLog
+                    model.gameLog = 
+                        model.gameWidth + " " +
+                        model.gameHeight + " " + 
+                        Banana.grav + " " + 
+                        model.winScoreCondition + " " +
+                        model.wind.isWind;
+
                     stage.setTitle("SimpGorillas!");
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
@@ -192,10 +208,10 @@ public class SimpController {
                                             // Get variables from file
                                             int Angle = Integer.parseInt(input.split(" ")[0]);
                                             int Velocity = Integer.parseInt(input.split(" ")[1]);
-                                            int Wind = Integer.parseInt(input.split(" ")[2]);
+                                            double Wind = Double.parseDouble(input.split(" ")[2]);
                                             
                                             // Shoot
-                                            Shoot(Angle, Velocity);
+                                            Shoot(Angle, Velocity, Wind);
                                             model.replayer = fileReader;
                                         }
                                         else {
@@ -204,6 +220,11 @@ public class SimpController {
                                             replay.stop();
                                             view.player1Controls.setDisable(!model.player1Turn);
                                             view.player2Controls.setDisable(model.player1Turn);
+                                            // Wind
+                                            model.wind.setWind();
+                                            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
+                                            updateWind();
+
                                             setGameControls();
                                         }
                                     }
@@ -437,9 +458,22 @@ public class SimpController {
         });
     }
 
-    public void Shoot(int Angle, int Velocity) {
+    public void Shoot(int Angle, int Velocity, double... Wind) {
+        double wind;
+
+        if (Wind.length > 0) { 
+            wind = Wind[0]; 
+            model.wind.windValue = wind;
+            view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
+            model.wind.setArrowDir();
+            view.arrowLabel.setText(model.wind.arrowDir);
+        }
+        else { 
+            wind = model.wind.windValue; 
+        }
+
         // Save shot in the gameLog
-        model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + model.wind.windValue);
+        model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + wind);
 
         // Clear map
         model.drawGame(view.gc);
@@ -450,21 +484,25 @@ public class SimpController {
 
         // Throw
         if (Player1Turn) {
-            lands = model.player1.throwBanana(view.gc, Angle, Velocity, model.gameHeight, model.wind.windValue);
+            lands = model.player1.throwBanana(view.gc, Angle, Velocity, model.gameHeight, wind);
         }
         else {
-            lands = model.player2.throwBanana(view.gc, Angle, Velocity, model.gameHeight, model.wind.windValue);
+            lands = model.player2.throwBanana(view.gc, Angle, Velocity, model.gameHeight, wind);
         }
 
         // Check for hit
         if (model.player2.isHit(lands, model.hitZone)) {
             model.player1.score++;
             view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-            updateWind();
+            if (Wind.length == 0) {
+                updateWind();
+            }
         } else if (model.player1.isHit(lands, model.hitZone)) {
             model.player2.score++;
             view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-            updateWind();
+            if (Wind.length == 0) {
+                updateWind();
+            }
         }
 
         // Change turn
