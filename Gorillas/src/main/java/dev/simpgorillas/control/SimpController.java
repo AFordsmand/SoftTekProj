@@ -137,7 +137,9 @@ public class SimpController {
             }
         });
 
-        // Load replay of a Game
+        // ===================================
+        // Replay function by Adam Fordsmand
+        // ===================================
         view.fileButton.setOnAction(actionEvent -> {
 
             // Get a File to read
@@ -176,6 +178,7 @@ public class SimpController {
                         model.winScoreCondition + " " +
                         model.wind.isWind;
 
+                    // Set up Game
                     stage.setTitle("SimpGorillas!");
                     stage.setScene(view.gameScene);
                     stage.centerOnScreen();
@@ -419,27 +422,30 @@ public class SimpController {
         });
     }
 
+    // ======================================
+    // End controls, made by Adam Fordsmand
+    // ======================================
     public void setEndControls() {
         // Stop timer
         if (model.timeline != null) {
             model.timeline.stop();
         }
 
-        // PLay Again, got to start screen and reset variables
+        // PLay Again
         view.replayButton.setOnAction(actionEvent -> {
+            // Reset variables
             model.playerWin = 0;
             model.player1.score = 0;
             model.player2.score = 0;
 
+            // Go to start menu
             view.setStartScene();
             setStartControls();
-
             stage.setTitle("SimpLauncher");
             stage.setScene(view.startScene);
             stage.centerOnScreen();
         });
 
-        // Save gameLog to file chosen using explorer
         view.saveButton.setOnAction(actionEvent -> {
 
             // Get save location
@@ -458,6 +464,10 @@ public class SimpController {
         });
     }
 
+    // ==================================================
+    // Shoot Method essential to all features therefore,
+    // Made by everyone combined.
+    // ==================================================
     public void Shoot(int Angle, int Velocity, double... Wind) {
         double wind;
 

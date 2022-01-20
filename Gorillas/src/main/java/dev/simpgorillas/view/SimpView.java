@@ -229,6 +229,9 @@ public class SimpView {
         gameScene = new Scene(gamePane);
     }
 
+    // ============================
+    // End scene by Adam Fordsmand
+    // ============================
     public void setEndScene() {
         winLabel = new Label("Player " + model.playerWin + " won!");
         winLabel.setWrapText(true);
