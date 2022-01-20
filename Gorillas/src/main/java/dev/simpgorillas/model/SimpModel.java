@@ -1,10 +1,12 @@
 package dev.simpgorillas.model;
 
 import dev.simpgorillas.model.entities.Gorilla;
+import dev.simpgorillas.model.entities.Wind;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
 import java.util.Scanner;
 
 public class SimpModel {
@@ -13,12 +15,14 @@ public class SimpModel {
     public int hitZone;
     public boolean player1Turn = true;
     public int playerWin = 0;
-    public int WinScoreCondition = 10;
+    public int winScoreCondition = 5;
     public String gameLog = "";
     public Scanner replayer = null;
 
     public Gorilla player1;
     public Gorilla player2;
+
+    public Wind wind;
 
     public int secondsPassed;
     public Timeline timeline;
@@ -32,16 +36,75 @@ public class SimpModel {
         hitZone = gameWidth / 50;
 
         secondsPassed = 0;
+
+        wind = new Wind();
     }
 
-    public boolean fitsScreen(Rectangle2D screenBounds) {
-        return true;
+    public boolean legalWidth(String toCheck, double maxWidth) {
+        if (isPosInt(toCheck)) {
+            int inputWidth = Integer.parseInt(toCheck);
+            if (inputWidth < 500) {
+                return false;
+            }
+            if (inputWidth > maxWidth) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean legalHeight(String toCheck, double maxHeight) {
+        if (isPosInt(toCheck)) {
+            int inputHeight = Integer.parseInt(toCheck);
+            if (inputHeight < 400) {
+                return false;
+            }
+            if (inputHeight > maxHeight) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean isPosInt(String toCheck) {
         try {
-            int num = Integer.parseInt(toCheck);
-            if (num > 0) {
+            int input = Integer.parseInt(toCheck);
+            if (input > 0) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isPosDouble(String toCheck) {
+        try {
+            double input = Double.parseDouble(toCheck);
+            if (input > 0) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean legalInput(String toCheck) {
+        try {
+            int input = Integer.parseInt(toCheck);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean legalWind(String toCheck) {
+        try {
+            int input = Integer.parseInt(toCheck);
+            if (input == 1 || input == 0) {
                 return true;
             }
         } catch (NumberFormatException e) {

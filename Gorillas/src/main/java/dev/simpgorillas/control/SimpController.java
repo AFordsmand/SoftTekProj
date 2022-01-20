@@ -1,6 +1,7 @@
 package dev.simpgorillas.control;
 
 import dev.simpgorillas.model.SimpModel;
+import dev.simpgorillas.model.entities.Banana;
 import dev.simpgorillas.view.SimpView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,15 +15,14 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Objects;
 import java.util.Scanner;
-import java.lang.Thread;
 import java.util.Timer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
 
 public class SimpController {
 
@@ -42,55 +42,82 @@ public class SimpController {
 
 
     public void setStartControls() {
-        // Get width and height (if legal) from startScene and set the stage's scene to gameScene
+        // Get parameters for game, if legal values, and set up the game
+        // Else indicate illegal values directly at the GUI
         view.playButton.setOnAction(actionEvent -> {
-            // Get screen dim
+            // Checks for legal input
+            boolean legalWidth = model.legalWidth(
+                    view.widthInput.getText(),
+                    Screen.getPrimary().getBounds().getWidth());
+            boolean legalHeight = model.legalHeight(
+                    view.heightInput.getText(),
+                    Screen.getPrimary().getVisualBounds().getHeight());
+            boolean legalGrav = view.gravInput.getText().isBlank() || model.isPosDouble(view.gravInput.getText());
+            boolean legalWind = model.legalWind(view.windInput.getText());
+            boolean legalPoints = view.pointInput.getText().isBlank() || model.isPosInt(view.pointInput.getText());
 
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            double screenWidth = screenBounds.getWidth();
-            double screenHeight = screenBounds.getHeight();
+            boolean startCond = legalWidth && legalHeight && legalGrav && legalWind && legalPoints;
 
-            // Check widthInput and heightInput for legal values
-            // TODO: set max and min screen sizes
-            // TODO: check for empty input in throw controls
-            // TODO: set points to win
-            // TODO: set gravity
-            // TODO: SimpGorillas
-
-
-
-            boolean posInts = model.isPosInt(view.widthInput.getText()) && model.isPosInt(view.heightInput.getText());
-
-            if (posInts) {
+            if (startCond) {
                 // Sets the width and height of the model
                 model.gameWidth = Integer.parseInt(view.widthInput.getText());
                 model.gameHeight = Integer.parseInt(view.heightInput.getText());
                 model.init();
 
-                // Setup gameLog
+                // Set banana's gravity
+                if (!view.gravInput.getText().isBlank()) {
+                    Banana.grav = Double.parseDouble(view.gravInput.getText());
+                }
+
+                // Set points to win
+                if (!view.pointInput.getText().isBlank()) {
+                    model.winScoreCondition = Integer.parseInt(view.pointInput.getText());
+                }
+
+                // Set up gameLog
                 model.gameLog = model.gameWidth + " " + model.gameHeight;
 
                 view.setGameScene();
                 model.drawGame(view.gc);
                 setGameControls();
 
+                model.wind.isWind = Integer.parseInt(view.windInput.getText());
+                model.wind.setWind();
+                view.windLabel.setText(model.wind.windValue + " pixels pr. second");
+
                 stage.setTitle("SimpGorillas!");
                 stage.setScene(view.gameScene);
                 stage.centerOnScreen();
             } else {
-                if (!model.isPosInt(view.widthInput.getText())) {
-                    view.widthInput.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                            BorderWidths.DEFAULT)));
+                // Width input error effect
+                if (!legalWidth) {
+                    view.widthInput.setBorder(view.redBorder);
                 } else {
-                    view.widthInput.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                            BorderWidths.DEFAULT)));
+                    view.widthInput.setBorder(view.greenBorder);
                 }
-                if (!model.isPosInt(view.heightInput.getText())) {
-                    view.heightInput.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                            BorderWidths.DEFAULT)));
+                // Height input error effect
+                if (!legalHeight) {
+                    view.heightInput.setBorder(view.redBorder);
                 } else {
-                    view.heightInput.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                            BorderWidths.DEFAULT)));
+                    view.heightInput.setBorder(view.greenBorder);
+                }
+                // Grav input error effect
+                if (!legalGrav) {
+                    view.gravInput.setBorder(view.redBorder);
+                } else {
+                    view.gravInput.setBorder(view.greenBorder);
+                }
+                // Wind input error effect
+                if (!legalWind) {
+                    view.windInput.setBorder(view.redBorder);
+                } else {
+                    view.windInput.setBorder(view.greenBorder);
+                }
+                // Point input error effect
+                if (!legalPoints) {
+                    view.pointInput.setBorder(view.redBorder);
+                } else {
+                    view.pointInput.setBorder(view.greenBorder);
                 }
             }
         });
@@ -101,6 +128,11 @@ public class SimpController {
             // Get a File to read
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
+
+            // Stop timer
+            if (model.timeline != null) {
+                model.timeline.stop();
+            }
             
             // If a file was chosen
             if (file != null) {
@@ -130,11 +162,11 @@ public class SimpController {
                     model.replayer = fileReader;
                    
                     // Define a new animation
-                    Timeline timeline = new Timeline();
-                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    Timeline replay = new Timeline();
+                    replay.setCycleCount(Timeline.INDEFINITE);
                    
                     // Add a Shoot event to the animation as a frame
-                    timeline.getKeyFrames().add(
+                    replay.getKeyFrames().add(
                             new KeyFrame(
                                 // interval between frames.
                                 Duration.millis(1000), 
@@ -160,10 +192,10 @@ public class SimpController {
                                         else {
                                             // If there are no more lines in file, 
                                             // Stop timeline and restore player control
-                                            timeline.stop();
-                                            setGameControls();
+                                            replay.stop();
                                             view.player1Controls.setDisable(!model.player1Turn);
                                             view.player2Controls.setDisable(model.player1Turn);
+                                            setGameControls();
                                         }
                                     }
                                 }
@@ -171,7 +203,7 @@ public class SimpController {
                     );
 
                     // Play the animation
-                    timeline.play();
+                    replay.play();
 
                 } catch(Exception e){
                     e.printStackTrace();
@@ -181,7 +213,7 @@ public class SimpController {
     }
 
     public void setGameControls() {
-        // Timer
+        // Timer 
         model.timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     model.secondsPassed++;
@@ -190,11 +222,19 @@ public class SimpController {
         model.timeline.setCycleCount(Timeline.INDEFINITE);
         model.timeline.play();
 
+        // TextField based controls for player1
         view.throwBtn1.setOnAction(actionEvent -> {
-            if (model.player1Turn) {
-                // Check for legal values and throw banana
+            // Check for legalInput
+            boolean legalAngle = model.legalInput(view.angle1Input.getText());
+            boolean legalVelocity = model.legalInput(view.velocity1Input.getText());
+
+            boolean legalInput = legalAngle && legalVelocity;
+
+            if (model.player1Turn && legalInput) {
+                // Get values and throw banana
                 int angle = Integer.parseInt(view.angle1Input.getText());
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
+                // TODO remove wind = 0?
                 long wind = 0;
 
                 Shoot(angle, velocity, wind);
@@ -202,20 +242,58 @@ public class SimpController {
                 // Change turn
                 view.player1Controls.setDisable(true);
                 view.player2Controls.setDisable(false);
+
+                // Set the borders to normal in case of previous illegal input
+                view.angle1Input.setBorder(view.normalBorder);
+                view.velocity1Input.setBorder(view.normalBorder);
+            } else {
+                if (!legalAngle) {
+                    view.angle1Input.setBorder(view.redBorder);
+                } else {
+                    view.angle1Input.setBorder(view.normalBorder);
+                }
+                if (!legalVelocity) {
+                    view.velocity1Input.setBorder(view.redBorder);
+                } else {
+                    view.velocity1Input.setBorder(view.normalBorder);
+                }
             }
         });
 
+        // TextField based controls for player2
         view.throwBtn2.setOnAction(actionEvent -> {
-            if (!model.player1Turn) {
-                // Check for legal values and throw banana
+            // Check for legalInput
+            boolean legalAngle = model.legalInput(view.angle2Input.getText());
+            boolean legalVelocity = model.legalInput(view.velocity2Input.getText());
+
+            boolean legalInput = legalAngle && legalVelocity;
+
+            if (!model.player1Turn && legalInput) {
+                // Get values and throw banana
                 int angle = Integer.parseInt(view.angle2Input.getText());
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
                 long wind = 0;
 
                 Shoot(angle, velocity, wind);
 
+                // Change turn
                 view.player1Controls.setDisable(false);
                 view.player2Controls.setDisable(true);
+
+                // Set the borders to normal in case of previous illegal input
+                view.angle2Input.setBorder(view.normalBorder);
+                view.velocity2Input.setBorder(view.normalBorder);
+            } else {
+                if (!legalAngle) {
+                    view.angle2Input.setBorder(view.redBorder);
+                } else {
+                    view.angle2Input.setBorder(view.normalBorder);
+                }
+                if (!legalVelocity) {
+                    view.velocity2Input.setBorder(view.redBorder);
+                } else {
+                    view.velocity2Input.setBorder(view.normalBorder);
+                }
             }
         });
 
@@ -230,7 +308,7 @@ public class SimpController {
                     int angle = Integer.parseInt(view.angle2Input.getText());
                     int velocity = Integer.parseInt(view.velocity2Input.getText());
 
-                    model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight);
+                    model.player2.throwBanana(view.gc, angle, velocity, model.gameHeight, model.wind.windValue);
                 }
 
                 view.gc.setStroke(Color.rgb(200,0,0));
@@ -255,7 +333,7 @@ public class SimpController {
                     int angle = Integer.parseInt(view.angle1Input.getText());
                     int velocity = Integer.parseInt(view.velocity1Input.getText());
 
-                    model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight);
+                    model.player1.throwBanana(view.gc, angle, velocity, model.gameHeight, model.wind.windValue);
                 }
 
                 view.gc.setStroke(Color.RED);
@@ -277,7 +355,6 @@ public class SimpController {
         view.gamePane.setOnMousePressed(actionEvent -> {
             if (model.player1Turn) {
                 // player1
-
                 // Get input based on mouse pos and throw the banana
                 int angle = -1 * model.calcAngle(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
@@ -295,7 +372,6 @@ public class SimpController {
                 view.player2Controls.setDisable(false);
             } else {
                 // player2
-
                 // Get input based on mouse pos and throw the banana
                 int angle = model.calcAngle(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
@@ -317,7 +393,9 @@ public class SimpController {
 
     public void setEndControls() {
         // Stop timer
-        model.timeline.stop();
+        if (model.timeline != null) {
+            model.timeline.stop();
+        }
 
         // PLay Again, got to start screen and reset variables
         view.replayButton.setOnAction(actionEvent -> {
@@ -362,26 +440,30 @@ public class SimpController {
 
         // Throw
         if (Player1Turn) {
-            lands = model.player1.throwBanana(view.gc, Angle, Velocity, model.gameHeight);
+            lands = model.player1.throwBanana(view.gc, Angle, Velocity, model.gameHeight, model.wind.windValue);
         }
         else {
-            lands = model.player2.throwBanana(view.gc, Angle, Velocity, model.gameHeight);
+            lands = model.player2.throwBanana(view.gc, Angle, Velocity, model.gameHeight, model.wind.windValue);
         }
 
         // Check for hit
         if (model.player2.isHit(lands, model.hitZone)) {
             model.player1.score++;
             view.player1Label.setText("Player 1 - Score: " + model.player1.score);
+            model.wind.setWind();
+            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
         } else if (model.player1.isHit(lands, model.hitZone)) {
             model.player2.score++;
             view.player2Label.setText("Player 2 - Score: " + model.player2.score);
+            model.wind.setWind();
+            view.windLabel.setText(model.wind.windValue + " pixels pr. second");
         }
 
         // Change turn
         model.player1Turn = !Player1Turn;
 
         // Win Condition
-        if (model.player1.score >= model.WinScoreCondition) {
+        if (model.player1.score >= model.winScoreCondition) {
             model.playerWin = 1;
 
             view.setEndScene();
@@ -392,7 +474,7 @@ public class SimpController {
             stage.setScene(view.endScene);
             stage.centerOnScreen();
         }
-        else if (model.player2.score >= model.WinScoreCondition) {
+        else if (model.player2.score >= model.winScoreCondition) {
             model.playerWin = 2;
 
             view.setEndScene();
