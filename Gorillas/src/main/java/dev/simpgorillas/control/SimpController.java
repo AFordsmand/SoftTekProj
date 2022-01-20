@@ -236,7 +236,7 @@ public class SimpController {
                     replay.play();
 
                 } catch(Exception e){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         });
