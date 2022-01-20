@@ -38,8 +38,13 @@ public class SimpController {
         view.setStartScene();
         setStartControls();
     }
-
-
+    
+    public void updateWind(){
+        model.wind.setWind();
+        view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
+        model.wind.setArrowDir();
+        view.arrowLabel.setText(model.wind.arrowDir);
+    }
 
     public void setStartControls() {
         // Get parameters for game, if legal values, and set up the game
@@ -87,10 +92,7 @@ public class SimpController {
 
                 // Wind
                 model.wind.isWind = Integer.parseInt(view.windInput.getText());
-                model.wind.setWind();
-                view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
-                model.wind.setArrowDir();
-                view.arrowLabel.setText(model.wind.arrowDir);
+                updateWind();
 
                 stage.setTitle("SimpGorillas!");
                 stage.setScene(view.gameScene);
@@ -458,17 +460,11 @@ public class SimpController {
         if (model.player2.isHit(lands, model.hitZone)) {
             model.player1.score++;
             view.player1Label.setText("Player 1 - Score: " + model.player1.score);
-            model.wind.setWind();
-            view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
-            model.wind.setArrowDir();
-            view.arrowLabel.setText(model.wind.arrowDir);
+            updateWind();
         } else if (model.player1.isHit(lands, model.hitZone)) {
             model.player2.score++;
             view.player2Label.setText("Player 2 - Score: " + model.player2.score);
-            model.wind.setWind();
-            view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
-            model.wind.setArrowDir();
-            view.arrowLabel.setText(model.wind.arrowDir);
+            updateWind();
         }
 
         // Change turn
