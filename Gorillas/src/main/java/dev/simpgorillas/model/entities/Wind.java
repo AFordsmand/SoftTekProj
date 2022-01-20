@@ -2,7 +2,7 @@ package dev.simpgorillas.model.entities;
 
 public class Wind {
     public int isWind;
-    public double windValue = 22;
+    public double windValue;
 
 
 

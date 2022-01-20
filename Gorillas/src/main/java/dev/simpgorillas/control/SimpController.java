@@ -186,7 +186,7 @@ public class SimpController {
                                             int Wind = Integer.parseInt(input.split(" ")[2]);
                                             
                                             // Shoot
-                                            Shoot(Angle, Velocity, Wind);
+                                            Shoot(Angle, Velocity);
                                             model.replayer = fileReader;
                                         }
                                         else {
@@ -234,10 +234,8 @@ public class SimpController {
                 // Get values and throw banana
                 int angle = Integer.parseInt(view.angle1Input.getText());
                 int velocity = Integer.parseInt(view.velocity1Input.getText());
-                // TODO remove wind = 0?
-                long wind = 0;
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -274,7 +272,7 @@ public class SimpController {
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
                 long wind = 0;
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity);
 
                 // Change turn
                 view.player1Controls.setDisable(false);
@@ -365,7 +363,7 @@ public class SimpController {
                 view.angle1Input.setText(String.valueOf(angle));
                 view.velocity1Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity);
 
                 // Change turn
                 view.player1Controls.setDisable(true);
@@ -382,7 +380,7 @@ public class SimpController {
                 view.angle2Input.setText(String.valueOf(angle));
                 view.velocity2Input.setText(String.valueOf(velocity));
 
-                Shoot(angle, velocity, wind);
+                Shoot(angle, velocity);
 
                 // Change turn
                 view.player1Controls.setDisable(false);
@@ -430,7 +428,10 @@ public class SimpController {
         });
     }
 
-    public void Shoot(int Angle, int Velocity, long Wind) {
+    public void Shoot(int Angle, int Velocity) {
+        // Save shot in the gameLog
+        model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + model.wind.windValue);
+
         // Clear map
         model.drawGame(view.gc);
 
@@ -485,8 +486,5 @@ public class SimpController {
             stage.setScene(view.endScene);
             stage.centerOnScreen();
         }
-
-        // Save shot in the gameLog
-        model.gameLog = model.gameLog.concat("\n" + Angle + " " + Velocity + " " + Wind);
     }
 }
