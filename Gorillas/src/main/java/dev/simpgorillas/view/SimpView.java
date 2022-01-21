@@ -71,6 +71,9 @@ public class SimpView {
     }
 
 
+    // =================================================================
+    // If not attributed to others, Start scene made by William Steffens
+    // =================================================================
     public void setStartScene() {
         widthAndHeightText = new Label("Set parameters of the game to start playing SimpGorillas! \n " +
                 "(width must be between 500 and " + (int) Screen.getPrimary().getVisualBounds().getWidth()
@@ -146,6 +149,9 @@ public class SimpView {
         startScene = new Scene(startPane, 350, 600);
     }
 
+    // =================================================================
+    // If not attributed to others, Game scene made by William Steffens
+    // =================================================================
     public void setGameScene() {
         gamePane = new Group();
         canvas = new Canvas(model.gameWidth, model.gameHeight);

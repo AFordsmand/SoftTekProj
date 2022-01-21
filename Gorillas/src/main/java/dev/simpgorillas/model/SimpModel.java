@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 
 import java.util.Scanner;
 
+// ==========================================
+// SimpModel class, made by William Steffens
+// ==========================================
 public class SimpModel {
 
     public int gameWidth, gameHeight;

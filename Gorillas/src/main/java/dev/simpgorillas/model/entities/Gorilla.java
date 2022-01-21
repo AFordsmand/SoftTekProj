@@ -3,6 +3,9 @@ package dev.simpgorillas.model.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+// ==========================================
+// Gorilla class, made by William Steffens
+// ==========================================
 public class Gorilla {
 
     public int x, y, centerX, dir;

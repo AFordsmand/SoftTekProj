@@ -46,6 +46,9 @@ public class SimpController {
         view.arrowLabel.setText(model.wind.arrowDir);
     }
 
+    // ========================================
+    // Start controls, made by William Steffens
+    // ========================================
     public void setStartControls() {
         // Get parameters for game, if legal values, and set up the game
         // Else indicate illegal values directly at the GUI
@@ -245,8 +248,13 @@ public class SimpController {
         });
     }
 
+    // ==========================================
+    // Game controls, made by William Steffens
+    // ==========================================
     public void setGameControls() {
-        // Timer 
+        // ==========================================
+        // Timer/Clock, made by William Steffens
+        // ==========================================
         model.timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     model.secondsPassed++;
@@ -255,7 +263,9 @@ public class SimpController {
         model.timeline.setCycleCount(Timeline.INDEFINITE);
         model.timeline.play();
 
-        // TextField based controls for player1
+        // ==========================================
+        // Text based input, made by William Steffens
+        // ==========================================
         view.throwBtn1.setOnAction(actionEvent -> {
             // Check for legalInput
             boolean legalAngle = model.legalInput(view.angle1Input.getText());
@@ -291,7 +301,9 @@ public class SimpController {
             }
         });
 
-        // TextField based controls for player2
+        // ==========================================
+        // Text based input, made by William Steffens
+        // ==========================================
         view.throwBtn2.setOnAction(actionEvent -> {
             // Check for legalInput
             boolean legalAngle = model.legalInput(view.angle2Input.getText());
@@ -328,7 +340,9 @@ public class SimpController {
             }
         });
 
-        // Mouse graphics
+        // ========================================
+        // Mouse graphics, made by William Steffens
+        // ========================================
         view.gamePane.setOnMouseMoved(actionEvent -> {
             if (model.player1Turn) {
                 // player1
@@ -382,7 +396,9 @@ public class SimpController {
             }
         });
 
-        // Mouse control
+        // ========================================
+        // Mouse controls, made by William Steffens
+        // ========================================
         view.gamePane.setOnMousePressed(actionEvent -> {
             if (model.player1Turn) {
                 // player1
