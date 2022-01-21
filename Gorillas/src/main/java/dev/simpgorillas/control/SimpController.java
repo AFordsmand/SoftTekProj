@@ -252,9 +252,6 @@ public class SimpController {
     // Game controls, made by William Steffens
     // ==========================================
     public void setGameControls() {
-        // ==========================================
-        // Timer/Clock, made by William Steffens
-        // ==========================================
         model.timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     model.secondsPassed++;
@@ -263,9 +260,6 @@ public class SimpController {
         model.timeline.setCycleCount(Timeline.INDEFINITE);
         model.timeline.play();
 
-        // ==========================================
-        // Text based input, made by William Steffens
-        // ==========================================
         view.throwBtn1.setOnAction(actionEvent -> {
             // Check for legalInput
             boolean legalAngle = model.legalInput(view.angle1Input.getText());
@@ -301,9 +295,6 @@ public class SimpController {
             }
         });
 
-        // ==========================================
-        // Text based input, made by William Steffens
-        // ==========================================
         view.throwBtn2.setOnAction(actionEvent -> {
             // Check for legalInput
             boolean legalAngle = model.legalInput(view.angle2Input.getText());
@@ -340,9 +331,6 @@ public class SimpController {
             }
         });
 
-        // ========================================
-        // Mouse graphics, made by William Steffens
-        // ========================================
         view.gamePane.setOnMouseMoved(actionEvent -> {
             if (model.player1Turn) {
                 // player1
@@ -395,10 +383,7 @@ public class SimpController {
                 view.velocity2Input.setText(String.valueOf(velocity));
             }
         });
-
-        // ========================================
-        // Mouse controls, made by William Steffens
-        // ========================================
+        
         view.gamePane.setOnMousePressed(actionEvent -> {
             if (model.player1Turn) {
                 // player1

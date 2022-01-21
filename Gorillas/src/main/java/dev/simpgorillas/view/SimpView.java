@@ -149,9 +149,9 @@ public class SimpView {
         startScene = new Scene(startPane, 350, 600);
     }
 
-    // =================================================================
+    // ================================================================
     // If not attributed to others, Game scene made by William Steffens
-    // =================================================================
+    // ================================================================
     public void setGameScene() {
         gamePane = new Group();
         canvas = new Canvas(model.gameWidth, model.gameHeight);
