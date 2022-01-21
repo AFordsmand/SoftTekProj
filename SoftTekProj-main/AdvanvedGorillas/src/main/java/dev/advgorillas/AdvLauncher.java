@@ -7,6 +7,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+// ============================================
+// AdvLauncher class, made by William Steffens
+// ============================================
 public class AdvLauncher extends Application {
 
     @Override

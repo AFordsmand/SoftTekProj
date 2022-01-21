@@ -10,6 +10,9 @@ import javafx.scene.paint.Color;
 
 import java.util.Scanner;
 
+// ==========================================
+// AdvModel class, made by William Steffens
+// ==========================================
 public class AdvModel {
 
     public int gameWidth, gameHeight;

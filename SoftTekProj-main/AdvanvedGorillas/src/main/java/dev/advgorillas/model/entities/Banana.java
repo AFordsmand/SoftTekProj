@@ -3,6 +3,9 @@ package dev.advgorillas.model.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+// ==========================================
+// Banana class, made by William Steffens
+// ==========================================
 public class Banana {
 
     private double x, y;

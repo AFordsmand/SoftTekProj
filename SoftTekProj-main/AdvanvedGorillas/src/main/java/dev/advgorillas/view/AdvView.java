@@ -70,7 +70,9 @@ public class AdvView {
         this.model = model;
     }
 
-
+    // =================================================================
+    // If not attributed to others, Start scene made by William Steffens
+    // =================================================================
     public void setStartScene() {
         widthAndHeightText = new Label("Set parameters of the game to start playing SimpGorillas! \n " +
                 "(width must be between 500 and " + (int) Screen.getPrimary().getVisualBounds().getWidth()
@@ -146,6 +148,9 @@ public class AdvView {
         startScene = new Scene(startPane, 350, 600);
     }
 
+    // ================================================================
+    // If not attributed to others, Game scene made by William Steffens
+    // ================================================================
     public void setGameScene() {
         gamePane = new Group();
         canvas = new Canvas(model.gameWidth, model.gameHeight);
@@ -199,7 +204,9 @@ public class AdvView {
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
-        // Wind
+        // ============================
+        // Wind display by Caroline Blixt
+        // ============================
         windControls = new VBox();
         windLabel = new Label(Math.abs(model.wind.windValue) + " pixels pr. second");
         windControls.getChildren().add(windLabel);

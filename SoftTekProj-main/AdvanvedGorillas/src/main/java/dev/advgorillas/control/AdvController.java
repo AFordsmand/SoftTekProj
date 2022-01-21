@@ -46,6 +46,9 @@ public class AdvController {
         view.arrowLabel.setText(model.wind.arrowDir);
     }
 
+    // ========================================
+    // Start controls, made by William Steffens
+    // ========================================
     public void setStartControls() {
         // Get parameters for game, if legal values, and set up the game
         // Else indicate illegal values directly at the GUI
@@ -244,7 +247,10 @@ public class AdvController {
             }
         });
     }
-
+    
+    // ==========================================
+    // Game controls, made by William Steffens
+    // ==========================================
     public void setGameControls() {
         // Timer 
         model.timeline = new Timeline(
