@@ -39,6 +39,11 @@ public class AdvController {
         setStartControls();
     }
     
+    
+    // ========================================
+    // Update wind value and display, 
+    // Made by Caroline Blixt
+    // ========================================
     public void updateWind(){
         model.wind.setWind();
         view.windLabel.setText(Math.abs(model.wind.windValue) + " pixels pr. second");
