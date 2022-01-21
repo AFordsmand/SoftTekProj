@@ -5,6 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import dev.advgorillas.view.AdvView;
 
+// ==========================================
+// Gorilla class, made by William Steffens
+// ==========================================
 public class Gorilla {
 
     public int x, y, centerX, dir;
