@@ -70,7 +70,9 @@ public class AdvView {
         this.model = model;
     }
 
-
+    // =================================================================
+    // If not attributed to others, Start scene made by William Steffens
+    // =================================================================
     public void setStartScene() {
         widthAndHeightText = new Label("Set parameters of the game to start playing SimpGorillas! \n " +
                 "(width must be between 500 and " + (int) Screen.getPrimary().getVisualBounds().getWidth()
