@@ -306,7 +306,6 @@ public class SimpController {
                 // Get values and throw banana
                 int angle = Integer.parseInt(view.angle2Input.getText());
                 int velocity = Integer.parseInt(view.velocity2Input.getText());
-                long wind = 0;
 
                 Shoot(angle, velocity);
 
@@ -383,7 +382,7 @@ public class SimpController {
                 view.velocity2Input.setText(String.valueOf(velocity));
             }
         });
-        
+
         view.gamePane.setOnMousePressed(actionEvent -> {
             if (model.player1Turn) {
                 // player1
@@ -392,7 +391,6 @@ public class SimpController {
                         (int) actionEvent.getX(), (int) actionEvent.getY());
                 int velocity = model.calcDist(model.player1.centerX, model.player1.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                long wind = 0;
 
                 view.angle1Input.setText(String.valueOf(angle));
                 view.velocity1Input.setText(String.valueOf(velocity));
@@ -409,7 +407,6 @@ public class SimpController {
                         (int) actionEvent.getX(), (int) actionEvent.getY());
                 int velocity = model.calcDist(model.player2.centerX, model.player2.y,
                         (int) actionEvent.getX(), (int) actionEvent.getY());
-                long wind = 0;
 
                 view.angle2Input.setText(String.valueOf(angle));
                 view.velocity2Input.setText(String.valueOf(velocity));
