@@ -10,7 +10,7 @@ public class Wind {
     public String arrowDir = "-";
 
 
-
+    // Check if the user has chosen to play with wind
     public void setWind() {
         if (isWind == 1){
             windValue = (int)(Math.random() * (200) - 100) / 100.0;
@@ -18,6 +18,8 @@ public class Wind {
             windValue = 0;
         }
     }
+    
+    // Making arrow depending on direction of wind
     public void setArrowDir(){
         if (windValue > 0){
             arrowDir = "->";
