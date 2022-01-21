@@ -204,7 +204,9 @@ public class AdvView {
         player2Controls.setLayoutY(0);
         player2Controls.setDisable(true);
 
-        // Wind
+        // ============================
+        // Wind display by Caroline Blixt
+        // ============================
         windControls = new VBox();
         windLabel = new Label(Math.abs(model.wind.windValue) + " pixels pr. second");
         windControls.getChildren().add(windLabel);
