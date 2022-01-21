@@ -1,5 +1,9 @@
 package dev.simpgorillas.model.entities;
 
+// ===================================
+// Wind function by Caroline Blixt
+// ===================================
+
 public class Wind {
     public int isWind;
     public double windValue;
